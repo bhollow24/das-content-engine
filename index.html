@@ -1,1 +1,294 @@
-PLACEHOLDER_INDEX
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DAS Content Engine · Internal v1</title>
+<style>
+@font-face { font-family: milling; src: url("fonts/milling.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: Inter; src: url("fonts/inter-latin.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F; }
+@font-face { font-family: "Fragment Mono"; src: url("fonts/fragment-mono.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+
+:root {
+  --bg: #ffffff;
+  --paper: #ffffff;
+  --ink: #111111;
+  --muted: #6a6a6a;
+  --line: #e4e4e4;
+  --accent: #111111;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body {
+  min-height: 100vh;
+  font: 15px/1.45 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.wrap { position: relative; z-index: 1; }
+
+header { padding: 28px 40px 18px; }
+.kicker {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 18px;
+}
+.draft {
+  letter-spacing: 0.1em;
+  border: 1px solid var(--ink);
+  padding: 2px 7px;
+  color: var(--ink);
+}
+.lockup .das {
+  font-family: milling, Inter, sans-serif;
+  font-size: 56px; line-height: 0.9; letter-spacing: -0.02em;
+  margin: 0;
+}
+.lockup .city {
+  font-family: milling, Inter, sans-serif;
+  font-size: 28px; line-height: 1; letter-spacing: 0.42em;
+  text-transform: lowercase; color: var(--ink);
+  margin: 8px 0 0; padding-left: 2px;
+}
+.page-title {
+  margin: 22px 0 6px;
+  font-family: milling, Inter, sans-serif;
+  font-size: 34px; line-height: 1.05; letter-spacing: -0.02em;
+}
+.sub { margin: 0; max-width: 640px; color: var(--muted); }
+
+nav {
+  display: flex; gap: 4px; padding: 0 40px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 86%, white);
+  position: sticky; top: 0; z-index: 2;
+}
+nav button {
+  appearance: none; background: none; border: 0;
+  font: 12px/1 Inter, sans-serif; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); padding: 16px 14px 14px; cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+nav button.on { color: var(--ink); border-bottom-color: var(--ink); }
+.wordmark { display: none; height: 72px; width: auto; margin: 4px 0 10px; }
+.wordmark.on { display: block; }
+
+main { padding: 28px 40px 80px; }
+section { display: none; }
+section.on { display: block; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 28px 40px; margin: 0 0 22px; }
+.stat strong {
+  display: block;
+  font-family: milling, Inter, sans-serif;
+  font-size: 40px; line-height: 1; letter-spacing: -0.03em;
+}
+.stat span { display: block; margin-top: 6px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+.filters button {
+  appearance: none; background: var(--paper);
+  border: 1px solid var(--line); color: var(--ink);
+  font: 12px/1 Inter, sans-serif; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 9px 12px; cursor: pointer;
+}
+.filters button.on { border-color: var(--ink); color: var(--ink); }
+
+.call, .note {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 14px 16px; margin: 0 0 22px; max-width: 760px;
+}
+.call strong { color: var(--ink); font-weight: 600; }
+.note { border: 0; background: none; padding: 0; color: var(--muted); }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th {
+  text-align: left; font-weight: 500; color: var(--muted);
+  letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px;
+  padding: 10px 10px; border-bottom: 1px solid var(--line);
+}
+td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: "Fragment Mono", ui-monospace, monospace; font-size: 13px; }
+tr:hover td { background: #f6f6f6; }
+.type { color: var(--muted); }
+.pill { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+.named { color: var(--ink); }
+.hold { color: var(--muted); }
+.open { color: var(--muted); }
+
+.schema h2 {
+  font-family: milling, Inter, sans-serif;
+  font-size: 26px; letter-spacing: -0.02em; margin: 32px 0 8px;
+}
+.schema p { max-width: 680px; }
+.schema code {
+  font-family: "Fragment Mono", ui-monospace, monospace;
+  font-size: 13px; background: #fff; border: 1px solid var(--line); padding: 1px 5px;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="kicker">Blockworks <span class="draft">Internal v1</span></p>
+  <img class="wordmark" id="wordmark" alt="" />
+  <div class="lockup" id="lockup">
+    <p class="das">DAS</p>
+    <p class="city" id="city">nyc</p>
+  </div>
+  <h1 class="page-title">Content Engine</h1>
+  <p class="sub">Past-event analytics from NYC 2026, plus empty shells for Asia and London. File schema is locked. Session IDs wait until the Asia agenda settles.</p>
+</header>
+<nav>
+  <button class="on" data-tab="nyc" data-city="nyc">NYC 2026</button>
+  <button data-tab="asia" data-city="asia">Asia 2026</button>
+  <button data-tab="london" data-city="london">London 2026</button>
+  <button data-tab="schema" data-city="internal">How files work</button>
+</nav>
+<main>
+  <section id="panel-nyc" class="on">
+    <div class="stats" id="nyc-stats"></div>
+    <p class="call"><strong>Canton</strong> 55 mentions in 10 sessions. <strong>Aave</strong> 9 mentions in 7 sessions. People counts are thin (ASR rarely says full names). Concept totals run hot on generic words like stablecoin and regulation.</p>
+    <div class="filters" id="type-filters"></div>
+    <table>
+      <thead><tr><th>Name</th><th>Type</th><th class="num">Mentions</th><th class="num">Sessions</th></tr></thead>
+      <tbody id="mentions-body"></tbody>
+    </table>
+  </section>
+  <section id="panel-asia">
+    <div class="stats" id="asia-stats"></div>
+    <p class="note">Pulled read-only from Airtable DAS Agenda. No Session ID field was added. Titles still moving. Oct 7 · Marina Bay Sands, Singapore.</p>
+    <table>
+      <thead><tr><th>Time UTC</th><th>Track</th><th>Session</th><th>State</th><th>Speakers</th></tr></thead>
+      <tbody id="asia-body"></tbody>
+    </table>
+  </section>
+  <section id="panel-london">
+    <div class="stats" id="london-stats"></div>
+    <p class="note">Same Airtable table, Events = London. Day 1 Investor + Main. Day 2 Institutional + Main. Nov 10–11 · Hilton Park Lane.</p>
+    <table>
+      <thead><tr><th>Day</th><th>Time UTC</th><th>Track</th><th>Session</th><th>State</th><th>Speakers</th></tr></thead>
+      <tbody id="london-body"></tbody>
+    </table>
+  </section>
+  <section id="panel-schema" class="schema">
+    <h2>What this page is</h2>
+    <p>An internal spec teammates can share. Not a public site. Not connected to X posting. Nothing auto-posts, auto-DMs, or auto-emails.</p>
+    <h2>Where files live</h2>
+    <p>Drive holds video. Obsidian holds session transcripts (the NYC vault you already have). The clip index (this page, later Notion) holds tags. Airtable DAS Agenda is the session source. Join key is the Airtable record id until we add a short Session ID.</p>
+    <h2>Clip names, going forward</h2>
+    <p>Panel: <code>DASAsia26_S14_market-structure_c01.mp4</code></p>
+    <p>Solo: <code>DASAsia26_S03_Atkins_SEC_keynote_c01.mp4</code></p>
+    <p>Folders stay <code>DAS Asia 2026 / Recordings / Clips / Day 1</code>. Day folders are for humans. The filename does the work. We will not rename the NYC Twitter exports unless you ask.</p>
+    <h2>Live Event Studio</h2>
+    <p>I pick 30–45s candidates off the X live. You greenlight. Drafts only. Honest delay is 1–3 minutes. Same naming on the way in, so Asia does not become Clip 43.</p>
+    <h2>Not in v1</h2>
+    <p>Smart Agenda Builder. Clip performance (DAS X login still broken). Timeline resurfacing (phase 2). Session IDs on the Asia agenda (too much flux before Oct 7).</p>
+    <h2>Brand note</h2>
+    <p>Black and white page. Official dark wordmarks on the Asia and London tabs. NYC is still the text lockup.</p>
+  </section>
+</main>
+</div>
+<script>
+const DATA = {"mentions": [{"name": "Bitcoin", "type": "Project", "n": 713, "sessions": 64}, {"name": "stablecoin", "type": "Concept", "n": 576, "sessions": 78}, {"name": "Tokenization", "type": "Concept", "n": 432, "sessions": 60}, {"name": "DeFi", "type": "Concept", "n": 317, "sessions": 49}, {"name": "ETF", "type": "Concept", "n": 267, "sessions": 37}, {"name": "regulation", "type": "Concept", "n": 262, "sessions": 64}, {"name": "Solana", "type": "Project", "n": 190, "sessions": 36}, {"name": "RWA", "type": "Concept", "n": 188, "sessions": 35}, {"name": "Ethereum", "type": "Project", "n": 123, "sessions": 47}, {"name": "Hyperliquid", "type": "Project", "n": 120, "sessions": 14}, {"name": "SEC", "type": "Company", "n": 105, "sessions": 26}, {"name": "custody", "type": "Concept", "n": 101, "sessions": 31}, {"name": "compliance", "type": "Concept", "n": 81, "sessions": 35}, {"name": "CFTC", "type": "Company", "n": 79, "sessions": 20}, {"name": "Coinbase", "type": "Company", "n": 66, "sessions": 22}, {"name": "Canton", "type": "Project", "n": 55, "sessions": 10}, {"name": "Federal Reserve", "type": "Company", "n": 54, "sessions": 10}, {"name": "Morpho", "type": "Project", "n": 53, "sessions": 12}, {"name": "GENIUS Act", "type": "Concept", "n": 50, "sessions": 24}, {"name": "SWIFT", "type": "Company", "n": 40, "sessions": 8}, {"name": "Kraken", "type": "Company", "n": 38, "sessions": 12}, {"name": "Nasdaq", "type": "Company", "n": 38, "sessions": 22}, {"name": "Robinhood", "type": "Company", "n": 34, "sessions": 14}, {"name": "Tether", "type": "Project", "n": 33, "sessions": 19}, {"name": "Bitwise", "type": "Company", "n": 32, "sessions": 6}, {"name": "Anchorage", "type": "Company", "n": 30, "sessions": 9}, {"name": "Circle", "type": "Company", "n": 30, "sessions": 18}, {"name": "JPMorgan", "type": "Company", "n": 30, "sessions": 18}, {"name": "Espresso", "type": "Project", "n": 28, "sessions": 1}, {"name": "DTCC", "type": "Company", "n": 25, "sessions": 13}, {"name": "Visa", "type": "Company", "n": 25, "sessions": 9}, {"name": "CME", "type": "Company", "n": 24, "sessions": 10}, {"name": "USDC", "type": "Project", "n": 24, "sessions": 18}, {"name": "CLARITY Act", "type": "Concept", "n": 23, "sessions": 15}, {"name": "Stripe", "type": "Company", "n": 23, "sessions": 14}, {"name": "BlackRock", "type": "Company", "n": 22, "sessions": 14}, {"name": "Stellar", "type": "Project", "n": 22, "sessions": 2}, {"name": "Avalanche", "type": "Project", "n": 21, "sessions": 10}, {"name": "Morgan Stanley", "type": "Company", "n": 19, "sessions": 10}, {"name": "Binance", "type": "Company", "n": 18, "sessions": 11}, {"name": "Donald Trump", "type": "Person", "n": 17, "sessions": 9}, {"name": "Maple", "type": "Project", "n": 17, "sessions": 5}, {"name": "BNB", "type": "Project", "n": 16, "sessions": 3}, {"name": "Franklin Templeton", "type": "Company", "n": 16, "sessions": 6}, {"name": "Ondo", "type": "Project", "n": 16, "sessions": 5}, {"name": "Optimism", "type": "Project", "n": 16, "sessions": 3}, {"name": "Securitize", "type": "Project", "n": 16, "sessions": 5}, {"name": "Phantom", "type": "Project", "n": 15, "sessions": 4}, {"name": "Superstate", "type": "Project", "n": 15, "sessions": 5}, {"name": "Pendle", "type": "Project", "n": 14, "sessions": 5}, {"name": "Fidelity", "type": "Company", "n": 13, "sessions": 9}, {"name": "OCC", "type": "Company", "n": 13, "sessions": 4}, {"name": "Ripple", "type": "Project", "n": 13, "sessions": 5}, {"name": "Uniswap", "type": "Project", "n": 13, "sessions": 11}, {"name": "Goldman Sachs", "type": "Company", "n": 12, "sessions": 7}, {"name": "Paul Atkins", "type": "Person", "n": 12, "sessions": 9}, {"name": "Western Union", "type": "Company", "n": 12, "sessions": 4}, {"name": "Arbitrum", "type": "Project", "n": 10, "sessions": 3}, {"name": "BNY Mellon", "type": "Company", "n": 10, "sessions": 3}, {"name": "Galaxy", "type": "Company", "n": 10, "sessions": 7}, {"name": "Aave", "type": "Project", "n": 9, "sessions": 7}, {"name": "Jane Street", "type": "Company", "n": 9, "sessions": 5}, {"name": "MoonPay", "type": "Company", "n": 9, "sessions": 1}, {"name": "Elon Musk", "type": "Person", "n": 8, "sessions": 2}, {"name": "Grayscale", "type": "Company", "n": 7, "sessions": 2}, {"name": "OKX", "type": "Company", "n": 7, "sessions": 7}, {"name": "Invesco", "type": "Company", "n": 6, "sessions": 2}, {"name": "Bitget", "type": "Company", "n": 5, "sessions": 2}, {"name": "Bybit", "type": "Company", "n": 5, "sessions": 4}, {"name": "Citadel Securities", "type": "Company", "n": 5, "sessions": 4}, {"name": "EigenLayer", "type": "Project", "n": 5, "sessions": 2}, {"name": "VanEck", "type": "Company", "n": 5, "sessions": 3}, {"name": "XRP", "type": "Project", "n": 5, "sessions": 3}, {"name": "FalconX", "type": "Company", "n": 4, "sessions": 3}, {"name": "Jamie Dimon", "type": "Person", "n": 4, "sessions": 1}, {"name": "Jupiter", "type": "Project", "n": 4, "sessions": 4}, {"name": "BitGo", "type": "Company", "n": 3, "sessions": 3}, {"name": "Chainlink", "type": "Project", "n": 3, "sessions": 3}, {"name": "Coinbase Custody", "type": "Company", "n": 3, "sessions": 3}, {"name": "Gemini", "type": "Company", "n": 3, "sessions": 3}, {"name": "Larry Fink", "type": "Person", "n": 3, "sessions": 2}, {"name": "MiCA", "type": "Concept", "n": 3, "sessions": 3}, {"name": "PayPal", "type": "Company", "n": 3, "sessions": 3}, {"name": "PayPal USD", "type": "Project", "n": 3, "sessions": 2}, {"name": "Cosmos", "type": "Project", "n": 2, "sessions": 1}, {"name": "Crypto.com", "type": "Company", "n": 2, "sessions": 2}, {"name": "Cumberland", "type": "Company", "n": 2, "sessions": 2}, {"name": "Drift", "type": "Project", "n": 2, "sessions": 1}, {"name": "Fireblocks", "type": "Company", "n": 2, "sessions": 2}, {"name": "Jack Dorsey", "type": "Person", "n": 2, "sessions": 1}, {"name": "Lido", "type": "Project", "n": 2, "sessions": 2}, {"name": "Mastercard", "type": "Company", "n": 2, "sessions": 2}, {"name": "Michael Saylor", "type": "Person", "n": 2, "sessions": 2}, {"name": "Paxos", "type": "Company", "n": 2, "sessions": 1}, {"name": "Ripple USD", "type": "Project", "n": 2, "sessions": 1}, {"name": "Robin Vince", "type": "Person", "n": 2, "sessions": 1}, {"name": "Scroll", "type": "Project", "n": 2, "sessions": 2}, {"name": "State Street", "type": "Company", "n": 2, "sessions": 2}, {"name": "Sui", "type": "Project", "n": 2, "sessions": 2}, {"name": "U.S. Treasury", "type": "Company", "n": 2, "sessions": 1}, {"name": "WisdomTree", "type": "Company", "n": 2, "sessions": 1}, {"name": "Aptos", "type": "Project", "n": 1, "sessions": 1}, {"name": "Bank of America", "type": "Company", "n": 1, "sessions": 1}, {"name": "Berachain", "type": "Project", "n": 1, "sessions": 1}, {"name": "Bitstamp", "type": "Company", "n": 1, "sessions": 1}, {"name": "BlackRock BUIDL", "type": "Project", "n": 1, "sessions": 1}, {"name": "Cathie Wood", "type": "Person", "n": 1, "sessions": 1}, {"name": "Citi", "type": "Company", "n": 1, "sessions": 1}, {"name": "Injective", "type": "Project", "n": 1, "sessions": 1}, {"name": "Jito", "type": "Project", "n": 1, "sessions": 1}, {"name": "Michael Selig", "type": "Person", "n": 1, "sessions": 1}, {"name": "Monad", "type": "Project", "n": 1, "sessions": 1}, {"name": "Polkadot", "type": "Project", "n": 1, "sessions": 1}, {"name": "Pyth", "type": "Project", "n": 1, "sessions": 1}, {"name": "Starknet", "type": "Project", "n": 1, "sessions": 1}, {"name": "Stephen Miran", "type": "Person", "n": 1, "sessions": 1}, {"name": "Vitalik Buterin", "type": "Person", "n": 1, "sessions": 1}, {"name": "Wormhole", "type": "Project", "n": 1, "sessions": 1}], "asia": [{"title": "Welcome to DAS Asia 2026", "day": "Day 1", "track": "Main Stage", "time": "13:00", "spots": "1", "status": "Full", "state": "named"}, {"title": "Open - 30 Mins", "day": "Day 1", "track": "Main Stage", "time": "13:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Underwriting The Future of Liquid Token Markets", "day": "Day 1", "track": "Investor Track", "time": "13:30", "spots": "1", "status": "Full", "state": "named"}, {"title": "Hold - Kamino", "day": "Day 1", "track": "Investor Track", "time": "13:50", "spots": "0", "status": "Open", "state": "hold"}, {"title": "Open - 20 mins", "day": "Day 1", "track": "Main Stage", "time": "14:00", "spots": "0", "status": "Open", "state": "open"}, {"title": "Hold - Jito", "day": "Day 1", "track": "Investor Track", "time": "14:10", "spots": "1", "status": "Full", "state": "hold"}, {"title": "Open - 20 mins", "day": "Day 1", "track": "Main Stage", "time": "14:20", "spots": "0", "status": "Open", "state": "open"}, {"title": "Token Market Outlook: Bull, Bear, or Chop?", "day": "Day 1", "track": "Investor Track", "time": "14:30", "spots": "3", "status": "Open", "state": "named"}, {"title": "Hold - Turtle Club", "day": "Day 1", "track": "Main Stage", "time": "14:40", "spots": "0", "status": "Open", "state": "hold"}, {"title": "Risk Assessment in the Vault Landscape", "day": "Day 1", "track": "Main Stage", "time": "14:50", "spots": "1", "status": "Full", "state": "named"}, {"title": "Fidelity Keynote", "day": "Day 1", "track": "Main Stage", "time": "15:00", "spots": "1", "status": "Full", "state": "named"}, {"title": "Hold - Spark", "day": "Day 1", "track": "Investor Track", "time": "15:00", "spots": "1", "status": "Open", "state": "hold"}, {"title": "Open - 10 Mins", "day": "Day 1", "track": "Main Stage", "time": "15:20", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 10 mins", "day": "Day 1", "track": "Investor Track", "time": "15:20", "spots": "0", "status": "Open", "state": "open"}, {"title": "Crypto Place in Today's Macro Regime", "day": "Day 1", "track": "Investor Track", "time": "15:30", "spots": "1", "status": "Open", "state": "named"}, {"title": "Hold - Tokenized Equities", "day": "Day 1", "track": "Main Stage", "time": "15:30", "spots": "3", "status": "Open", "state": "hold"}, {"title": "Lunch Break", "day": "Day 1", "track": "Main Stage", "time": "16:00", "spots": "0", "status": "Full", "state": "named"}, {"title": "Lunch Break", "day": "Day 1", "track": "Investor Track", "time": "16:00", "spots": "0", "status": "Full", "state": "named"}, {"title": "Rewired: The Future of Asia's Payment Rails", "day": "Day 1", "track": "Investor Track", "time": "17:00", "spots": "3", "status": "Open", "state": "named"}, {"title": "CEO Interview", "day": "Day 1", "track": "Main Stage", "time": "17:00", "spots": "0", "status": "Open", "state": "named"}, {"title": "How Institutional Investors Are Using Perps", "day": "Day 1", "track": "Investor Track", "time": "17:30", "spots": "2", "status": "Open", "state": "named"}, {"title": "Hyperliquid: In Conversation with Jeffrey Yan", "day": "Day 1", "track": "Main Stage", "time": "17:30", "spots": "1", "status": "Full", "state": "named"}, {"title": "Who Wins In the Global Stablecoin Arms Race?", "day": "Day 1", "track": "Main Stage", "time": "18:00", "spots": "1", "status": "Full", "state": "named"}, {"title": "Debate: How Has AI Impacted Crypto's Private Markets?", "day": "Day 1", "track": "Investor Track", "time": "18:00", "spots": "4", "status": "Open", "state": "named"}, {"title": "In Conversation with Arjun Sethi", "day": "Day 1", "track": "Main Stage", "time": "18:20", "spots": "1", "status": "Full", "state": "named"}, {"title": "Vaults: Fully Unlocking Onchain Asset Management", "day": "Day 1", "track": "Investor Track", "time": "18:30", "spots": "1", "status": "Full", "state": "named"}, {"title": "Tokenization's Impact on the Exchange & Brokerage Landscape", "day": "Day 1", "track": "Main Stage", "time": "18:30", "spots": "4", "status": "Open", "state": "named"}, {"title": "SBI's Bet On Onchain Asset Management", "day": "Day 1", "track": "Main Stage", "time": "19:00", "spots": "2", "status": "Open", "state": "named"}, {"title": "Hold - Uni", "day": "Day 1", "track": "Investor Track", "time": "19:00", "spots": "0", "status": "Open", "state": "hold"}, {"title": "Hold - Ava / RWAs", "day": "Day 1", "track": "Investor Track", "time": "19:20", "spots": "0", "status": "Open", "state": "hold"}, {"title": "Onchain Asset Issuance: Strategies & Risk Management", "day": "Day 1", "track": "Main Stage", "time": "19:20", "spots": "1", "status": "Open", "state": "named"}, {"title": "Hold - Justin Sun", "day": "Day 1", "track": "Main Stage", "time": "19:30", "spots": "1", "status": "Open", "state": "hold"}, {"title": "How AI Is Transforming Underwriting & Valuations", "day": "Day 1", "track": "Investor Track", "time": "19:40", "spots": "1", "status": "Full", "state": "named"}, {"title": "In Conversation with Mike Belshe", "day": "Day 1", "track": "Main Stage", "time": "20:00", "spots": "1", "status": "Open", "state": "named"}, {"title": "Hold - 30 mins", "day": "Day 1", "track": "Investor Track", "time": "20:00", "spots": "0", "status": "Open", "state": "hold"}, {"title": "Debate: Privacy vs Transparency in Onchain Finance", "day": "Day 1", "track": "Main Stage", "time": "20:20", "spots": "2", "status": "Open", "state": "named"}], "london": [{"title": "Welcome to DAS London 2026: Investor Day", "day": "Day 1", "track": "Main Stage", "time": "14:00", "spots": "0", "status": "Open", "state": "named"}, {"title": "LMAX Fireside", "day": "Day 1", "track": "Main Stage", "time": "14:30", "spots": "1", "status": "Open", "state": "named"}, {"title": "Open - 20", "day": "Day 1", "track": "Investor Track", "time": "14:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Main Stage", "time": "14:50", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Investor Track", "time": "14:50", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 30", "day": "Day 1", "track": "Main Stage", "time": "15:10", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Investor Track", "time": "15:10", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Investor Track", "time": "15:40", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Main Stage", "time": "15:40", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Main Stage", "time": "16:00", "spots": "0", "status": "Open", "state": "open"}, {"title": "Forward Guidance", "day": "Day 1", "track": "Investor Track", "time": "16:00", "spots": "1", "status": "Open", "state": "named"}, {"title": "Open - 40", "day": "Day 1", "track": "Main Stage", "time": "16:20", "spots": "0", "status": "Open", "state": "open"}, {"title": "What Goes Into TradFi Token Valuation Models?", "day": "Day 1", "track": "Investor Track", "time": "17:00", "spots": "1", "status": "Open", "state": "named"}, {"title": "Open - 30", "day": "Day 1", "track": "Main Stage", "time": "17:00", "spots": "0", "status": "Open", "state": "open"}, {"title": "Lunch Break", "day": "Day 1", "track": "Investor Track", "time": "17:30", "spots": "0", "status": "Full", "state": "named"}, {"title": "Lunch Break", "day": "Day 1", "track": "Main Stage", "time": "17:30", "spots": "0", "status": "Full", "state": "named"}, {"title": "The Convergence of Crypto & FinTech", "day": "Day 1", "track": "Main Stage", "time": "18:30", "spots": "1", "status": "Open", "state": "named"}, {"title": "How Investor's Are Approaching Vaults", "day": "Day 1", "track": "Investor Track", "time": "18:30", "spots": "0", "status": "Open", "state": "named"}, {"title": "Open - 20", "day": "Day 1", "track": "Main Stage", "time": "19:00", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Investor Track", "time": "19:00", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 10", "day": "Day 1", "track": "Main Stage", "time": "19:20", "spots": "0", "status": "Open", "state": "open"}, {"title": "The Institutional Allocator's Perspective on Digital Assets", "day": "Day 1", "track": "Investor Track", "time": "19:20", "spots": "1", "status": "Full", "state": "named"}, {"title": "Open - 20", "day": "Day 1", "track": "Investor Track", "time": "19:40", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 30", "day": "Day 1", "track": "Main Stage", "time": "20:00", "spots": "0", "status": "Open", "state": "open"}, {"title": "How Institutional Investors Are Using Perps", "day": "Day 1", "track": "Investor Track", "time": "20:00", "spots": "0", "status": "Open", "state": "named"}, {"title": "Open - 10", "day": "Day 1", "track": "Investor Track", "time": "20:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 10", "day": "Day 1", "track": "Main Stage", "time": "20:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Main Stage", "time": "20:40", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 1", "track": "Investor Track", "time": "20:40", "spots": "0", "status": "Open", "state": "open"}, {"title": "Welcome to DAS London: Institutional Day", "day": "Day 2", "track": "Main Stage", "time": "14:00", "spots": "1", "status": "Full", "state": "named"}, {"title": "Open - 30", "day": "Day 2", "track": "Main Stage", "time": "14:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 30", "day": "Day 2", "track": "Institutional track", "time": "14:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 10", "day": "Day 2", "track": "Institutional track", "time": "14:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 10", "day": "Day 2", "track": "Main Stage", "time": "15:00", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 2", "track": "Institutional track", "time": "15:00", "spots": "0", "status": "Open", "state": "open"}, {"title": "Vaults & Onchain Asset Mgt", "day": "Day 2", "track": "Main Stage", "time": "15:10", "spots": "0", "status": "Open", "state": "named"}, {"title": "Open - 20", "day": "Day 2", "track": "Institutional track", "time": "15:20", "spots": "0", "status": "Open", "state": "open"}, {"title": "UK Regulatory Session", "day": "Day 2", "track": "Main Stage", "time": "15:30", "spots": "1", "status": "Open", "state": "named"}, {"title": "Open - 20 mins", "day": "Day 2", "track": "Institutional track", "time": "15:40", "spots": "0", "status": "Open", "state": "open"}, {"title": "DeFi's Next Leg Up", "day": "Day 2", "track": "Main Stage", "time": "16:00", "spots": "2", "status": "Full", "state": "named"}, {"title": "Open - 20", "day": "Day 2", "track": "Main Stage", "time": "16:20", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 2", "track": "Main Stage", "time": "16:40", "spots": "0", "status": "Open", "state": "open"}, {"title": "On the Frontier of Tokenization", "day": "Day 2", "track": "Institutional track", "time": "17:00", "spots": "1", "status": "Open", "state": "named"}, {"title": "Lunch Break", "day": "Day 2", "track": "Institutional track", "time": "17:30", "spots": "0", "status": "Full", "state": "named"}, {"title": "Lunch Break", "day": "Day 2", "track": "Main Stage", "time": "17:30", "spots": "0", "status": "Full", "state": "named"}, {"title": "Open - 20", "day": "Day 2", "track": "Main Stage", "time": "18:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 2", "track": "Institutional track", "time": "18:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Tokenization", "day": "Day 2", "track": "Institutional track", "time": "18:50", "spots": "2", "status": "Open", "state": "named"}, {"title": "Tokenized Equities: The Opportunity Ahead", "day": "Day 2", "track": "Main Stage", "time": "18:50", "spots": "1", "status": "Open", "state": "named"}, {"title": "Open - 40", "day": "Day 2", "track": "Main Stage", "time": "19:10", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 30", "day": "Day 2", "track": "Institutional track", "time": "19:30", "spots": "1", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 2", "track": "Institutional track", "time": "19:50", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 2", "track": "Main Stage", "time": "19:50", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 2", "track": "Main Stage", "time": "20:10", "spots": "2", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 2", "track": "Institutional track", "time": "20:10", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 20", "day": "Day 2", "track": "Institutional track", "time": "20:30", "spots": "0", "status": "Open", "state": "open"}, {"title": "Open - 30", "day": "Day 2", "track": "Main Stage", "time": "20:30", "spots": "0", "status": "Open", "state": "open"}]};
+const $ = (id) => document.getElementById(id);
+
+function showTab(id) {
+  const tab = id || 'nyc';
+  const btn = document.querySelector(`nav button[data-tab="${tab}"]`);
+  const city = (btn && btn.dataset.city) || tab;
+  document.documentElement.dataset.event = tab;
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  document.querySelectorAll('main section').forEach(s => s.classList.toggle('on', s.id === "panel-" + tab));
+  $('city').textContent = city;
+  const marks = {
+    asia: "brand/asia-wordmark-dark.svg",
+    london: "brand/london-wordmark-dark.svg"
+  };
+  const img = $('wordmark');
+  const lockup = $('lockup');
+  if (marks[tab]) {
+    img.src = marks[tab];
+    img.alt = 'DAS ' + city;
+    img.classList.add('on');
+    lockup.style.display = 'none';
+  } else {
+    img.removeAttribute('src');
+    img.classList.remove('on');
+    lockup.style.display = '';
+  }
+}
+
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.onclick = () => {
+    location.hash = btn.dataset.tab;
+    showTab(btn.dataset.tab);
+  };
+});
+
+function stats(el, items) {
+  el.innerHTML = items.map(([n,l]) => `<div class="stat"><strong>${n}</strong><span>${l}</span></div>`).join('');
+}
+
+stats($('nyc-stats'), [
+  [94, 'sessions transcribed'],
+  [DATA.mentions.length, 'entities with a hit'],
+  [DATA.mentions.filter(m => m.type==='Company').length, 'companies'],
+  [DATA.mentions.filter(m => m.type==='Project').length, 'projects'],
+]);
+
+let typeFilter = 'All';
+const types = ['All','Company','Concept','Person','Project'];
+const filters = $('type-filters');
+function renderMentions() {
+  const rows = DATA.mentions.filter(m => typeFilter==='All' || m.type===typeFilter);
+  $('mentions-body').innerHTML = rows.map(m =>
+    `<tr><td>${m.name}</td><td class="type">${m.type}</td><td class="num">${m.n}</td><td class="num">${m.sessions}</td></tr>`
+  ).join('');
+}
+types.forEach(t => {
+  const b = document.createElement('button');
+  b.textContent = t;
+  if (t==='All') b.className = 'on';
+  b.onclick = () => {
+    typeFilter = t;
+    [...filters.children].forEach(x => x.classList.toggle('on', x.textContent===t));
+    renderMentions();
+  };
+  filters.appendChild(b);
+});
+renderMentions();
+
+function countState(rows, key) { return rows.filter(r => r.state===key).length; }
+stats($('asia-stats'), [
+  [DATA.asia.length, 'sessions'],
+  [countState(DATA.asia,'named'), 'named titles'],
+  [countState(DATA.asia,'hold') + countState(DATA.asia,'open'), 'still Hold / Open'],
+  ['Oct 7', 'Singapore'],
+]);
+stats($('london-stats'), [
+  [DATA.london.length, 'sessions'],
+  [countState(DATA.london,'named'), 'named titles'],
+  [countState(DATA.london,'open'), 'still Open'],
+  ['Nov 10–11', 'London'],
+]);
+
+function stateClass(s) {
+  if (s==='named') return 'named';
+  if (s==='hold') return 'hold';
+  return 'open';
+}
+$('asia-body').innerHTML = DATA.asia.map(r =>
+  `<tr><td class="num">${r.time}</td><td>${r.track}</td><td>${r.title}</td><td class="pill ${stateClass(r.state)}">${r.state}</td><td class="num">${r.spots}</td></tr>`
+).join('');
+$('london-body').innerHTML = DATA.london.map(r =>
+  `<tr><td>${r.day}</td><td class="num">${r.time}</td><td>${r.track}</td><td>${r.title}</td><td class="pill ${stateClass(r.state)}">${r.state}</td><td class="num">${r.spots}</td></tr>`
+).join('');
+
+showTab((location.hash || '#nyc').slice(1));
+</script>
+</body>
+</html>
