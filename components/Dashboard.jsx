@@ -102,7 +102,7 @@ function PastAnalytics({ mentions }) {
   const [filter, setFilter] = useState('All');
   const [search, setSearch] = useState('');
   const rows = useMemo(() => mentions.map((entity) => ({ ...entity, displayType: entityType(entity) })), [mentions]);
-  const typeOrder = ['All', 'Company', 'Regulator', 'Protocol', 'Stablecoin', 'Person', 'Topic'];
+  const typeOrder = ['All', 'Company', 'Protocol', 'Person', 'Topic'];
   const filters = typeOrder.filter((type) => type === 'All' || rows.some((row) => row.displayType === type));
   const chartRows = rows.filter((row) => filter === 'All' || row.displayType === filter);
   const mentionBars = [...chartRows].sort((a, b) => b.n - a.n).slice(0, 8);
