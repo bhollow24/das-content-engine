@@ -1,0 +1,105 @@
+{
+  "schema": {
+    "pattern": "Eventcode_day_stage_titleslug",
+    "eventcode": "DASNYC26",
+    "day": "D1|D2|D3",
+    "stage": "cleaned track (inst/inst. -> institutional, main stage -> main)",
+    "clipSuffix": "_c01",
+    "note": "Filenames are proposed. Drive files have not been renamed."
+  },
+  "playlistOnly": [
+    {
+      "title": "Welcome to DAS NYC 2026 Day 3",
+      "day": 3,
+      "track": "Main Stage",
+      "stage": "main",
+      "filename": "DASNYC26_D3_main_welcome-to-das-nyc-2026-day-3",
+      "youtube_id": "NGxOKHTDyNc",
+      "youtube_url": "https://www.youtube.com/watch?v=NGxOKHTDyNc",
+      "has_transcript": false
+    },
+    {
+      "title": "Stablecoins & the Invasion of FinTech",
+      "day": 3,
+      "track": "Empire",
+      "stage": "empire",
+      "filename": "DASNYC26_D3_empire_stablecoins-and-the-invasion-of-fintech",
+      "youtube_id": "3Pb9ox46ZAk",
+      "youtube_url": "https://www.youtube.com/watch?v=3Pb9ox46ZAk",
+      "has_transcript": false
+    },
+    {
+      "title": "Tokenized Deposits: The Gateway to Mass Adoption",
+      "day": 3,
+      "track": "Main Stage",
+      "stage": "main",
+      "filename": "DASNYC26_D3_main_tokenized-deposits-the-gateway-to-mass-adoption",
+      "youtube_id": "t4mX7_OT6Cs",
+      "youtube_url": "https://www.youtube.com/watch?v=t4mX7_OT6Cs",
+      "has_transcript": false
+    },
+    {
+      "title": "Live: Empire Roundup",
+      "day": 3,
+      "track": "Empire",
+      "stage": "empire",
+      "filename": "DASNYC26_D3_empire_live-empire-roundup",
+      "youtube_id": "RKRm6g48rZY",
+      "youtube_url": "https://www.youtube.com/watch?v=RKRm6g48rZY",
+      "has_transcript": false
+    },
+    {
+      "title": "How to Build a $25 Billion Everything Exchange",
+      "day": 3,
+      "track": "Empire",
+      "stage": "empire",
+      "filename": "DASNYC26_D3_empire_how-to-build-a-25-billion-everything-exchange",
+      "youtube_id": "bahUMDm0CIw",
+      "youtube_url": "https://www.youtube.com/watch?v=bahUMDm0CIw",
+      "has_transcript": false
+    },
+    {
+      "title": "Unpacking Crypto's Value Accrual Problem",
+      "day": 3,
+      "track": "Empire",
+      "stage": "empire",
+      "filename": "DASNYC26_D3_empire_unpacking-cryptos-value-accrual-problem",
+      "youtube_id": "6FFuV3mo8dI",
+      "youtube_url": "https://www.youtube.com/watch?v=6FFuV3mo8dI",
+      "has_transcript": false
+    },
+    {
+      "title": "From Issuance to Trading: The Onchain Lifecycle of Real World Assets",
+      "day": 3,
+      "track": "Insights",
+      "stage": "insights",
+      "filename": "DASNYC26_D3_insights_from-issuance-to-trading-the-onchain-lifecycle-of-real-world-assets",
+      "youtube_id": "GRkTdNvE-Tc",
+      "youtube_url": "https://www.youtube.com/watch?v=GRkTdNvE-Tc",
+      "has_transcript": false
+    },
+    {
+      "title": "Building the Institutional Digital Asset Stack: Connectivity and Trusted Execution",
+      "day": 3,
+      "track": "Day 3",
+      "stage": "main",
+      "filename": "DASNYC26_D3_main_building-the-institutional-digital-asset-stack-connectivity-and-trusted-execution",
+      "youtube_id": "GStGHsPr9rs",
+      "youtube_url": "https://www.youtube.com/watch?v=GStGHsPr9rs",
+      "has_transcript": false
+    }
+  ],
+  "driveSocial": {
+    "day1": 44,
+    "day2": 45,
+    "day3": 44,
+    "total": 133,
+    "fullSessionNamed": 2,
+    "folders": {
+      "day1": "https://drive.google.com/drive/folders/1P1of6O5yNCJ-sQ17G7LgtHdZY6UYSJJ-",
+      "day2": "https://drive.google.com/drive/folders/1g-3l15dU3R82OMkvzjmq7FLhzPL7E6Ft",
+      "day3": "https://drive.google.com/drive/folders/15DfARnDRGq7sRfUddwvzNQskyoDfYTgT"
+    },
+    "note": "Numbered 2026TwitterExport / SocialClip files. Not assigned to sessions. Do not invent clip-to-session mappings. Day 1 includes Clip23.5 (44 social clips, not 43)."
+  }
+}
