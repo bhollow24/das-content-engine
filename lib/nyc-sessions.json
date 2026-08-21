@@ -1,1 +1,9 @@
-LOADING_FULL_FILE
+{
+  "note": "Sessions live in nyc-sessions-d1.json, nyc-sessions-d2.json, nyc-sessions-d3.json, and nyc-sessions-meta.json. page.jsx merges them into one nyc object.",
+  "parts": [
+    "lib/nyc-sessions-d1.json",
+    "lib/nyc-sessions-d2.json",
+    "lib/nyc-sessions-d3.json",
+    "lib/nyc-sessions-meta.json"
+  ]
+}
