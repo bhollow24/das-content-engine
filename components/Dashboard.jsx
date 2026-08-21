@@ -76,12 +76,37 @@ function Filters({ labels, value, onChange }) {
   );
 }
 
+function BarChart({ title, rows, metric, valueLabel }) {
+  const max = Math.max(...rows.map((row) => row[metric]), 1);
+
+  return (
+    <article className="bar-chart">
+      <div className="bar-chart-heading">
+        <h3>{title}</h3>
+        <span>Top {rows.length}</span>
+      </div>
+      <div className="bar-list">
+        {rows.map((row) => (
+          <div className="bar-row" key={`${metric}-${row.name}`} aria-label={`${row.name}: ${row[metric]} ${valueLabel}`}>
+            <div className="bar-label"><strong>{row.name}</strong><span>{row.displayType}</span></div>
+            <div className="bar-track" aria-hidden="true"><span style={{ width: `${Math.max((row[metric] / max) * 100, 2)}%` }} /></div>
+            <span className="bar-value">{row[metric]}</span>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
 function PastAnalytics({ mentions }) {
   const [filter, setFilter] = useState('All');
   const [search, setSearch] = useState('');
   const rows = useMemo(() => mentions.map((entity) => ({ ...entity, displayType: entityType(entity) })), [mentions]);
   const typeOrder = ['All', 'Company', 'Regulator', 'Protocol', 'Stablecoin', 'Person', 'Topic'];
   const filters = typeOrder.filter((type) => type === 'All' || rows.some((row) => row.displayType === type));
+  const chartRows = rows.filter((row) => filter === 'All' || row.displayType === filter);
+  const mentionBars = [...chartRows].sort((a, b) => b.n - a.n).slice(0, 8);
+  const sessionBars = [...chartRows].sort((a, b) => b.sessions - a.sessions || b.n - a.n).slice(0, 8);
   const visible = rows.filter((row) => {
     const matchesType = filter === 'All' || row.displayType === filter;
     const matchesSearch = !search || `${row.name} ${row.displayType}`.toLowerCase().includes(search.toLowerCase());
@@ -96,13 +121,20 @@ function PastAnalytics({ mentions }) {
         [rows.filter((row) => row.displayType === 'Company').length, 'companies'],
         [rows.filter((row) => row.displayType === 'Regulator').length, 'regulators'],
       ]} />
+      <div className="analytics-filter-row">
+        <span>Filter by type</span>
+        <Filters labels={filters} value={filter} onChange={setFilter} />
+      </div>
+      <div className="analytics-charts">
+        <BarChart title="Top mentions" rows={mentionBars} metric="n" valueLabel="mentions" />
+        <BarChart title="Session reach" rows={sessionBars} metric="sessions" valueLabel="sessions" />
+      </div>
       <div className="call"><strong>Canton</strong> appears 55 times across 10 sessions. <strong>Aave</strong> appears 9 times across 7 sessions. Generic topic counts remain directional until transcript QA is complete.</div>
       <div className="toolbar">
         <label className="search-field">
           <span className="sr-only">Search analytics</span>
           <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search entities or topics" autoComplete="off" />
         </label>
-        <Filters labels={filters} value={filter} onChange={setFilter} />
       </div>
       <div className="table-wrap">
         <table>
