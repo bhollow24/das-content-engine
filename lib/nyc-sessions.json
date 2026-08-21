@@ -12,6 +12,21 @@
       "drive_full_video": null,
       "stage": "investor",
       "filename": "DASNYC26_D1_investor_avoiding-another-10-10-the-market-structure-we-need"
+    },
+    {
+      "title": "Bitcoin In a World With Quantum Computers",
+      "day": 1,
+      "track": "Bitcoin",
+      "youtube_id": "27zEgJ-2i1w",
+      "youtube_url": "https://www.youtube.com/watch?v=27zEgJ-2i1w",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Bitcoin In a World With Quantum Computers - DAS NYC 2026 - Day 1 - Bitcoin.md",
+      "mention_count": 45,
+      "drive_full_video": null,
+      "stage": "bitcoin",
+      "filename": "DASNYC26_D1_bitcoin_bitcoin-in-a-world-with-quantum-computers"
     }
-  ]
+  ],
+  "playlistOnly": [],
+  "schema": {"note": "truncated-test-do-not-keep"}
 }
