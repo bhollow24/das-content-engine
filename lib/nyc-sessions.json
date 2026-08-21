@@ -1,1 +1,17 @@
-PLACEHOLDER_READ_FROM_DISK
+{
+  "sessions": [
+    {
+      "title": "Avoiding Another 10/10: The Market Structure We Need",
+      "day": 1,
+      "track": "Investor",
+      "youtube_id": "DgfnIBPVgBo",
+      "youtube_url": "https://www.youtube.com/watch?v=DgfnIBPVgBo",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Avoiding Another 10 - 10 - The Market Structure We Need - DAS NYC 2026 - Day 1 - Investor.md",
+      "mention_count": 35,
+      "drive_full_video": null,
+      "stage": "investor",
+      "filename": "DASNYC26_D1_investor_avoiding-another-10-10-the-market-structure-we-need"
+    }
+  ]
+}
