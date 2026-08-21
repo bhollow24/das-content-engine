@@ -407,6 +407,19 @@
       "drive_full_video": null,
       "stage": "main",
       "filename": "DASNYC26_D1_main_welcome-to-das-nyc-2026"
+    },
+    {
+      "title": "AI As a Blessing, Not a Curse, To The US Economy",
+      "day": 2,
+      "track": "Forward Guidance",
+      "youtube_id": "J5fXePLOUcE",
+      "youtube_url": "https://www.youtube.com/watch?v=J5fXePLOUcE",
+      "has_transcript": true,
+      "transcript_relpath": "Day 2/AI As a Blessing, Not a Curse, To The US Economy - DAS NYC 2026 - Day 2 - Forward Guidance.md",
+      "mention_count": 21,
+      "drive_full_video": null,
+      "stage": "forward-guidance",
+      "filename": "DASNYC26_D2_forward-guidance_ai-as-a-blessing-not-a-curse-to-the-us-economy"
     }
   ],
   "playlistOnly": [
