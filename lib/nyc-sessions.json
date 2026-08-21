@@ -10,9 +10,61 @@
       "transcript_relpath": "Day 1/Avoiding Another 10 - 10 - The Market Structure We Need - DAS NYC 2026 - Day 1 - Investor.md",
       "mention_count": 35,
       "drive_full_video": null
+    },
+    {
+      "title": "Bitcoin In a World With Quantum Computers",
+      "day": 1,
+      "track": "Bitcoin",
+      "youtube_id": "27zEgJ-2i1w",
+      "youtube_url": "https://www.youtube.com/watch?v=27zEgJ-2i1w",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Bitcoin In a World With Quantum Computers - DAS NYC 2026 - Day 1 - Bitcoin.md",
+      "mention_count": 45,
+      "drive_full_video": null
+    },
+    {
+      "title": "Bitcoin's Institutional State of the Union",
+      "day": 1,
+      "track": "Bitcoin",
+      "youtube_id": "f1Aw1KJUP9Y",
+      "youtube_url": "https://www.youtube.com/watch?v=f1Aw1KJUP9Y",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Bitcoin's Institutional State of the Union - DAS NYC 2026 - Day 1 - Bitcoin.md",
+      "mention_count": 54,
+      "drive_full_video": null
+    },
+    {
+      "title": "Bitcoin's Onchain State of the Union",
+      "day": 1,
+      "track": "Bitcoin",
+      "youtube_id": "nBEpxmFgTSM",
+      "youtube_url": "https://www.youtube.com/watch?v=nBEpxmFgTSM",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Bitcoin's Onchain State of the Union - DAS NYC 2026 - Day 1 - Bitcoin.md",
+      "mention_count": 150,
+      "drive_full_video": null
+    },
+    {
+      "title": "Building the Onchain Fixed Income Ecosystem",
+      "day": 1,
+      "track": "Main",
+      "youtube_id": "RwcFf1cShoo",
+      "youtube_url": "https://www.youtube.com/watch?v=RwcFf1cShoo",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Building the Onchain Fixed Income Ecosystem - DAS NYC 2026 - Day 1 - Main.md",
+      "mention_count": 45,
+      "drive_full_video": null
     }
   ],
-  "playlistOnly": [],
+  "playlistOnly": [
+    {
+      "title": "Welcome to DAS NYC 2026 Day 3",
+      "day": 3,
+      "track": "Main Stage",
+      "youtube_id": "NGxOKHTDyNc",
+      "youtube_url": "https://www.youtube.com/watch?v=NGxOKHTDyNc"
+    }
+  ],
   "driveSocial": {
     "day1": 43,
     "day2": 45,
