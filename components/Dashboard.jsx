@@ -196,7 +196,99 @@ function UpcomingAnalytics({ event, rows }) {
   );
 }
 
-function ClipLibrary({ event, rows }) {
+function NycClipLibrary({ nyc }) {
+  const [filter, setFilter] = useState('All');
+  const [search, setSearch] = useState('');
+  const sessions = nyc?.sessions || [];
+  const playlistOnly = nyc?.playlistOnly || [];
+  const driveSocial = nyc?.driveSocial || {};
+  const rows = useMemo(() => {
+    const transcribed = sessions.map((session) => ({
+      ...session,
+      kind: session.drive_full_video ? 'Drive full' : 'Transcript',
+    }));
+    const extras = playlistOnly.map((session) => ({
+      ...session,
+      has_transcript: false,
+      mention_count: null,
+      drive_full_video: null,
+      kind: 'YouTube only',
+    }));
+    return [...transcribed, ...extras];
+  }, [sessions, playlistOnly]);
+  const stages = useMemo(() => [...new Set(rows.map((row) => row.stage || 'main'))].sort(), [rows]);
+  const filters = ['All', 'Day 1', 'Day 2', 'Day 3', ...stages];
+  const visible = rows.filter((row) => {
+    const dayLabel = `Day ${row.day}`;
+    const matchesFilter = filter === 'All' || filter === dayLabel || (row.stage || 'main') === filter;
+    const haystack = `${row.title} ${row.stage || ''} ${row.filename || ''} ${row.track || ''} ${row.kind}`.toLowerCase();
+    return matchesFilter && (!search || haystack.includes(search.toLowerCase()));
+  });
+  const namedDrive = sessions.filter((session) => session.drive_full_video).length;
+  const folders = driveSocial.folders || {};
+
+  return (
+    <>
+      <Stats items={[
+        [sessions.length, 'sessions transcribed'],
+        [playlistOnly.length, 'YouTube only'],
+        [namedDrive, 'named Drive videos'],
+        [driveSocial.total || 133, 'unmapped social clips'],
+      ]} />
+      <div className="call">Proposed names use <strong>Eventcode_day_stage_titleslug</strong>. Numbered Twitter-export clips are not assigned to sessions yet. Drive files have not been renamed.</div>
+      <div className="toolbar">
+        <label className="search-field">
+          <span className="sr-only">Search clip library</span>
+          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search title, stage, or filename" autoComplete="off" />
+        </label>
+        <Filters labels={filters} value={filter} onChange={setFilter} />
+      </div>
+      <div className="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Session</th>
+              <th>Day</th>
+              <th>Stage</th>
+              <th>Filename</th>
+              <th>YouTube</th>
+              <th>Transcript</th>
+              <th className="num">Mentions</th>
+              <th>Drive</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visible.map((row) => (
+              <tr key={row.youtube_id || row.filename}>
+                <td>{row.title}<div className="type">{row.kind}</div></td>
+                <td className="num">{row.day}</td>
+                <td>{row.stage || 'main'}</td>
+                <td className="filename-cell">{row.filename}</td>
+                <td>{row.youtube_url ? <a href={row.youtube_url} target="_blank" rel="noreferrer">Watch</a> : '—'}</td>
+                <td>{row.has_transcript ? 'Yes' : 'No'}</td>
+                <td className="num">{row.mention_count ?? '—'}</td>
+                <td>{row.drive_full_video?.url ? <a href={row.drive_full_video.url} target="_blank" rel="noreferrer">File</a> : '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {!visible.length && <p className="table-empty">No sessions match those filters.</p>}
+      <div className="social-clip-block">
+        <h3>Unmapped social clips</h3>
+        <p>133 numbered Twitter-export files. Same day only. Not matched to a session yet.</p>
+        <div className="social-folders">
+          <a href={folders.day1} target="_blank" rel="noreferrer"><strong>Day 1</strong><span>{driveSocial.day1 || 44} clips</span></a>
+          <a href={folders.day2} target="_blank" rel="noreferrer"><strong>Day 2</strong><span>{driveSocial.day2 || 45} clips</span></a>
+          <a href={folders.day3} target="_blank" rel="noreferrer"><strong>Day 3</strong><span>{driveSocial.day3 || 44} clips</span></a>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ClipLibrary({ event, rows, nyc }) {
+  if (event.id === 'nyc') return <NycClipLibrary nyc={nyc} />;
   const past = event.group === 'past';
   const stats = past
     ? [[0, 'clips indexed'], [94, 'transcripts ready'], [118, 'entities tagged'], ['Drive', 'connection pending']]
@@ -209,7 +301,7 @@ function ClipLibrary({ event, rows }) {
         <article>
           <h3>{past ? 'Data status' : 'Setup status'}</h3>
           <p>{past ? 'Transcript and entity data are ready. Connect the Drive clip folder to add video records.' : 'Assign session IDs and connect the event Drive folder before recordings arrive.'}</p>
-          {!past && <code>DAS{event.id === 'asia' ? 'Asia' : 'London'}26_S14_market-structure_c01.mp4</code>}
+          {!past && <code>DAS{event.id === 'asia' ? 'Asia' : 'London'}26_D1_main_market-structure_c01.mp4</code>}
         </article>
         <article>
           <h3>Readiness</h3>
@@ -234,7 +326,7 @@ function ClipLibrary({ event, rows }) {
   );
 }
 
-export default function Dashboard({ data }) {
+export default function Dashboard({ data, nyc }) {
   const [route, setRoute] = useState('home');
 
   useEffect(() => {
@@ -288,7 +380,7 @@ export default function Dashboard({ data }) {
               <button className="choice-card past-card" type="button" onClick={() => navigate('past')}><span className="choice-index">01</span><span className="choice-label">Past Events</span><span className="choice-meta"><span>Content Analytics</span><span>Clip Library</span></span><span className="choice-arrow" aria-hidden="true">→</span></button>
               <button className="choice-card upcoming-card" type="button" onClick={() => navigate('upcoming')}><span className="choice-index">02</span><span className="choice-label">Upcoming Events</span><span className="choice-meta"><span>Content Analytics</span><span>Clip Library</span></span><span className="choice-arrow" aria-hidden="true">→</span></button>
             </div>
-            <div className="home-status"><div><strong>94</strong><span>past sessions transcribed</span></div><div><strong>2</strong><span>upcoming events</span></div><div><strong>118</strong><span>entities detected</span></div><div><strong>0</strong><span>clips indexed</span></div></div>
+            <div className="home-status"><div><strong>94</strong><span>past sessions transcribed</span></div><div><strong>2</strong><span>upcoming events</span></div><div><strong>118</strong><span>entities detected</span></div><div><strong>102</strong><span>NYC videos listed</span></div></div>
           </section>
         )}
 
@@ -317,7 +409,7 @@ export default function Dashboard({ data }) {
             </div>
             <nav className="workspace-nav" aria-label="Event tools"><button type="button" className={tool === 'analytics' ? 'on' : ''} onClick={() => navigate(`${event.id}/analytics`)}>Content Analytics</button><button type="button" className={tool === 'clips' ? 'on' : ''} onClick={() => navigate(`${event.id}/clips`)}>Clip Library</button></nav>
             <div className="tool-panel on">
-              {tool === 'analytics' ? (event.group === 'past' ? <PastAnalytics mentions={data.mentions} /> : <UpcomingAnalytics event={event} rows={data[event.id]} />) : <ClipLibrary event={event} rows={data[event.id] || []} />}
+              {tool === 'analytics' ? (event.group === 'past' ? <PastAnalytics mentions={data.mentions} /> : <UpcomingAnalytics event={event} rows={data[event.id]} />) : <ClipLibrary event={event} rows={data[event.id] || []} nyc={nyc} />}
             </div>
           </section>
         )}
