@@ -1,28 +1,42 @@
 # DAS Content Engine
 
-Internal v1 for Blockworks DAS. Not a public marketing site. Nothing auto-posts.
+Authenticated internal working product for the Blockworks DAS content team. Nothing auto-posts, auto-DMs, or auto-emails.
 
-Private repo: [bhollow24/das-content-engine](https://github.com/bhollow24/das-content-engine)
+## Product structure
 
-## What is here
+The homepage separates events by lifecycle:
 
-- **NYC 2026** — mention counts from 94 session transcripts (company, concept, person, project)
-- **Asia 2026** — session shells from Airtable, Oct 7, Singapore
-- **London 2026** — session shells from Airtable, Nov 10–11
-- **How files work** — clip naming and file rules
+- Past Events
+- Upcoming Events
 
-Official dark wordmarks on Asia and London. NYC is still the text lockup.
+Every event contains two workspaces:
 
-## Local
+- Content Analytics
+- Clip Library
 
-Open `index.html` in a browser. No build step.
+## Current data
 
-## Vercel
+- NYC 2026 — 118 tracked entities across 94 session transcripts
+- Asia 2026 — 36 agenda rows for October 7 in Singapore
+- London 2026 — 57 agenda rows for November 10–11
 
-Static site. `vercel.json` only sets clean URLs.
+Past-event analytics use transcript mention data. Upcoming-event analytics use agenda readiness data. Clip Library screens expose the intended schema and integration state without inventing clip records that are not in the repository.
 
-## Do not
+## Local use
 
-- Auto-post, auto-DM, or auto-email
-- Write Session IDs onto the Asia agenda yet
-- Treat this as a public marketing page
+1. Pull the Vercel development environment variables.
+2. Run `pnpm install`.
+3. Run `pnpm dev`.
+
+Clerk protects the dashboard route. The sign-in flow lives at `/sign-in`.
+
+## Deployment
+
+The project uses Next.js App Router on Vercel. Clerk credentials are provisioned through the Vercel Marketplace and must not be committed.
+
+## Guardrails
+
+- Keep publishing and outreach human-approved
+- Treat the agenda as the operational source of truth
+- Preserve stable session IDs once they are assigned
+- Use the documented clip naming convention for new assets

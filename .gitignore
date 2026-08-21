@@ -1,7 +1,11 @@
 .DS_Store
+.next/
+node_modules/
 shots/
 brand/*-hero.*
 brand/asia-mark*
 brand/asia-word-png*
 brand/london-logo*
 brand/london-hero*
+.vercel
+.env*
