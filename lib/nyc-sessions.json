@@ -54,6 +54,61 @@
       "transcript_relpath": "Day 1/Building the Onchain Fixed Income Ecosystem - DAS NYC 2026 - Day 1 - Main.md",
       "mention_count": 45,
       "drive_full_video": null
+    },
+    {
+      "title": "Crypto & FinTech: Worlds Colliding",
+      "day": 1,
+      "track": "Main",
+      "youtube_id": "hjg9wLxypDs",
+      "youtube_url": "https://www.youtube.com/watch?v=hjg9wLxypDs",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Crypto & FinTech - Worlds Colliding - DAS NYC 2026 - Day 1 - Main.md",
+      "mention_count": 34,
+      "drive_full_video": null
+    },
+    {
+      "title": "DeFi Vaults: Building Future-Proof Earn for Institutions",
+      "day": 1,
+      "track": "Institutional",
+      "youtube_id": "RgXVuBb60Nc",
+      "youtube_url": "https://www.youtube.com/watch?v=RgXVuBb60Nc",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/DeFi Vaults - Building Future-Proof Earn for Institutions - DAS NYC 2026 - Day 1 - Institutional.md",
+      "mention_count": 27,
+      "drive_full_video": null
+    },
+    {
+      "title": "Digital Assets at an Inflection Point: The View From Inside",
+      "day": 1,
+      "track": "Main",
+      "youtube_id": "sLbbNZo1XUU",
+      "youtube_url": "https://www.youtube.com/watch?v=sLbbNZo1XUU",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Digital Assets at an Inflection Point - The View From Inside - DAS NYC 2026 - Day 1 - Main.md",
+      "mention_count": 11,
+      "drive_full_video": null
+    },
+    {
+      "title": "From Store of Value to Productive Capital | Bitcoin's Place in DeFi",
+      "day": 1,
+      "track": "Bitcoin",
+      "youtube_id": "kTY_i3nB9Ks",
+      "youtube_url": "https://www.youtube.com/watch?v=kTY_i3nB9Ks",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/From Store of Value to Productive Capital - Bitcoin's Place in DeFi - DAS NYC 2026 - Day 1 - Bitcoin.md",
+      "mention_count": 115,
+      "drive_full_video": null
+    },
+    {
+      "title": "Hyper Efficient Capital: Crypto's Key Unlock",
+      "day": 1,
+      "track": "Institutional",
+      "youtube_id": "-ItfEL4vwNc",
+      "youtube_url": "https://www.youtube.com/watch?v=-ItfEL4vwNc",
+      "has_transcript": true,
+      "transcript_relpath": "Day 1/Hyper Efficient Capital - Crypto's Key Unlock - DAS NYC 2026 - Day 1 - Institutional.md",
+      "mention_count": 14,
+      "drive_full_video": null
     }
   ],
   "playlistOnly": [
@@ -63,6 +118,55 @@
       "track": "Main Stage",
       "youtube_id": "NGxOKHTDyNc",
       "youtube_url": "https://www.youtube.com/watch?v=NGxOKHTDyNc"
+    },
+    {
+      "title": "Stablecoins & the Invasion of FinTech",
+      "day": 3,
+      "track": "Empire",
+      "youtube_id": "3Pb9ox46ZAk",
+      "youtube_url": "https://www.youtube.com/watch?v=3Pb9ox46ZAk"
+    },
+    {
+      "title": "Tokenized Deposits: The Gateway to Mass Adoption",
+      "day": 3,
+      "track": "Main Stage",
+      "youtube_id": "t4mX7_OT6Cs",
+      "youtube_url": "https://www.youtube.com/watch?v=t4mX7_OT6Cs"
+    },
+    {
+      "title": "Live: Empire Roundup",
+      "day": 3,
+      "track": "Empire",
+      "youtube_id": "RKRm6g48rZY",
+      "youtube_url": "https://www.youtube.com/watch?v=RKRm6g48rZY"
+    },
+    {
+      "title": "How to Build a $25 Billion Everything Exchange",
+      "day": 3,
+      "track": "Empire",
+      "youtube_id": "bahUMDm0CIw",
+      "youtube_url": "https://www.youtube.com/watch?v=bahUMDm0CIw"
+    },
+    {
+      "title": "Unpacking Crypto's Value Accrual Problem",
+      "day": 3,
+      "track": "Empire",
+      "youtube_id": "6FFuV3mo8dI",
+      "youtube_url": "https://www.youtube.com/watch?v=6FFuV3mo8dI"
+    },
+    {
+      "title": "From Issuance to Trading: The Onchain Lifecycle of Real World Assets",
+      "day": 3,
+      "track": "Insights",
+      "youtube_id": "GRkTdNvE-Tc",
+      "youtube_url": "https://www.youtube.com/watch?v=GRkTdNvE-Tc"
+    },
+    {
+      "title": "Building the Institutional Digital Asset Stack: Connectivity and Trusted Execution",
+      "day": 3,
+      "track": "Day 3",
+      "youtube_id": "GStGHsPr9rs",
+      "youtube_url": "https://www.youtube.com/watch?v=GStGHsPr9rs"
     }
   ],
   "driveSocial": {
