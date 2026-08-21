@@ -403,6 +403,17 @@ tbody tr:hover td { background: var(--soft); }
 .clerk-title { font-family: milling, Inter, sans-serif; letter-spacing: -0.03em; }
 .clerk-button { border-radius: 0; box-shadow: none; }
 
+a { color: var(--ink); }
+.filename-cell { font-family: "Fragment Mono", monospace; font-size: 11px; word-break: break-all; color: var(--muted); }
+.social-clip-block { margin-top: 36px; }
+.social-clip-block h3 { margin: 0 0 8px; font-family: milling, Inter, sans-serif; font-size: 25px; letter-spacing: -0.025em; }
+.social-clip-block p { margin: 0 0 16px; color: var(--muted); }
+.social-folders { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.social-folders a { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid var(--line); text-decoration: none; }
+.social-folders a:hover { background: var(--soft); }
+.social-folders span { color: var(--muted); font-size: 12px; }
+
+
 footer {
   display: flex;
   justify-content: space-between;
@@ -434,7 +445,7 @@ footer {
   .user-control { margin-left: auto; }
   .product-lockup { display: none; }
   main { padding: 0 20px 64px; }
-  .choice-grid, .event-grid, .clip-overview, .analytics-charts { grid-template-columns: 1fr; }
+  .choice-grid, .event-grid, .clip-overview, .analytics-charts, .social-folders { grid-template-columns: 1fr; }
   .choice-card + .choice-card { border-left: 0; border-top: 1px solid var(--ink); }
   .choice-card { min-height: 320px; }
   .home-status { grid-template-columns: repeat(2, minmax(0,1fr)); }
