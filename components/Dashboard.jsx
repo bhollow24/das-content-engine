@@ -197,7 +197,8 @@ function UpcomingAnalytics({ event, rows }) {
 }
 
 function NycClipLibrary({ nyc }) {
-  const [filter, setFilter] = useState('All');
+  const [dayFilter, setDayFilter] = useState('Day 1');
+  const [stageFilter, setStageFilter] = useState('main');
   const [search, setSearch] = useState('');
   const sessions = nyc?.sessions || [];
   const playlistOnly = nyc?.playlistOnly || [];
@@ -216,38 +217,65 @@ function NycClipLibrary({ nyc }) {
     }));
     return [...transcribed, ...extras];
   }, [sessions, playlistOnly]);
-  const stages = useMemo(() => [...new Set(rows.map((row) => row.stage || 'main'))].sort(), [rows]);
-  const filters = ['All', 'Day 1', 'Day 2', 'Day 3', ...stages];
+  const dayFilters = ['Day 1', 'Day 2', 'Day 3', 'All days'];
+  const stages = useMemo(() => {
+    const dayRows = rows.filter((row) => dayFilter === 'All days' || `Day ${row.day}` === dayFilter);
+    return [...new Set(dayRows.map((row) => row.stage || 'main'))]
+      .sort((a, b) => (a === 'main' ? -1 : b === 'main' ? 1 : a.localeCompare(b)));
+  }, [dayFilter, rows]);
+
+  useEffect(() => {
+    if (stageFilter !== 'All stages' && !stages.includes(stageFilter)) {
+      setStageFilter(stages.includes('main') ? 'main' : 'All stages');
+    }
+  }, [stageFilter, stages]);
+
   const visible = rows.filter((row) => {
     const dayLabel = `Day ${row.day}`;
-    const matchesFilter = filter === 'All' || filter === dayLabel || (row.stage || 'main') === filter;
+    const matchesDay = dayFilter === 'All days' || dayFilter === dayLabel;
+    const matchesStage = stageFilter === 'All stages' || (row.stage || 'main') === stageFilter;
     const clipHay = (row.social_clips || []).map((clip) => `${clip.lastNameToken || ''} ${clip.driveTitle || ''}`).join(' ');
     const speakerHay = (row.speakers || []).join(' ');
     const haystack = `${row.title} ${speakerHay} ${row.stage || ''} ${row.filename || ''} ${row.track || ''} ${row.kind} ${clipHay}`.toLowerCase();
-    return matchesFilter && (!search || haystack.includes(search.toLowerCase()));
+    return matchesDay && matchesStage && (!search || haystack.includes(search.toLowerCase()));
   });
-  const namedDrive = sessions.filter((session) => session.drive_full_video).length;
   const folders = driveSocial.folders || {};
+  const stageLabel = (stage) => stage === 'main'
+    ? 'Main Stage'
+    : stage.replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
 
   return (
     <>
       <Stats items={[
         [sessions.length, 'sessions transcribed'],
-        [playlistOnly.length, 'YouTube only'],
-        [namedDrive, 'named Drive videos'],
-        [driveSocial.total ?? 89, 'unmapped social clips'],
         [driveSocial.day1Mapped ?? nyc?.clipsDay1?.mappedSocialCount ?? 44, 'mapped Day 1 clips'],
+        [driveSocial.total ?? 89, 'unmapped social clips'],
       ]} />
-      <div className="call">Day 1 social clips are mapped. Drive files have not been renamed. Proposed names shown.</div>
-      <div className="toolbar">
+      <div className="clip-filter-stack">
+        <div className="clip-filter-group">
+          <span className="clip-filter-label"><strong>1</strong> Filter by day</span>
+          <Filters labels={dayFilters} value={dayFilter} onChange={setDayFilter} />
+        </div>
+        <div className="clip-filter-group">
+          <span className="clip-filter-label"><strong>2</strong> Filter by stage</span>
+          <div className="filters" aria-label="Filter clips by stage">
+            {[...stages, 'All stages'].map((stage) => (
+              <button type="button" className={stageFilter === stage ? 'on' : ''} onClick={() => setStageFilter(stage)} key={stage}>
+                {stage === 'All stages' ? stage : stageLabel(stage)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="toolbar clip-search-toolbar">
         <label className="search-field">
           <span className="sr-only">Search clip library</span>
           <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search title, speaker, stage, filename, or clip" autoComplete="off" />
         </label>
-        <Filters labels={filters} value={filter} onChange={setFilter} />
+        <span className="result-count">{visible.length} sessions</span>
       </div>
-      <div className="table-wrap">
-        <table>
+      <div className="table-wrap clip-library-table-wrap">
+        <table className="clip-library-table">
           <thead>
             <tr>
               <th>Session</th>
@@ -264,24 +292,31 @@ function NycClipLibrary({ nyc }) {
           <tbody>
             {visible.map((row) => (
               <tr key={row.youtube_id || row.filename}>
-                <td>{row.title}<div className="type">{row.kind}</div></td>
-                <td>{row.speakers?.length ? row.speakers.join(', ') : '—'}</td>
-                <td className="num">{row.day}</td>
-                <td>{row.stage || 'main'}</td>
-                <td className="filename-cell">{row.filename}</td>
-                <td>{row.youtube_url ? <a href={row.youtube_url} target="_blank" rel="noreferrer">Watch</a> : '—'}</td>
-                <td>{row.has_transcript ? 'Yes' : 'No'}</td>
-                <td className="num">{row.mention_count ?? '—'}</td>
-                <td>
+                <td className="session-cell">
+                  <div className="session-title">{row.title}</div>
+                  <div className="type">{row.kind}</div>
                   {row.social_clips?.length ? (
-                    <div className="drive-clips">
-                      <span>{row.social_clips.length} clips</span>
+                    <div className="nested-clips">
+                      <div className="nested-clips-heading">{row.social_clips.length} mapped {row.social_clips.length === 1 ? 'clip' : 'clips'}</div>
                       {row.social_clips.map((clip) => (
-                        <a key={clip.fileId} href={clip.url} target="_blank" rel="noreferrer">{clip.driveTitle || clip.filename}</a>
+                        <a className="nested-clip" key={clip.fileId} href={clip.url} target="_blank" rel="noreferrer">
+                          <span className="clip-index">Clip {String(clip.clipIndex).padStart(2, '0')}</span>
+                          <span className="clip-name">{clip.driveTitle || `Clip ${clip.clipIndex}`}</span>
+                          <span className="clip-open" aria-hidden="true">Open ↗</span>
+                        </a>
                       ))}
                     </div>
                   ) : null}
-                  {row.drive_full_video?.url ? <a href={row.drive_full_video.url} target="_blank" rel="noreferrer">File</a> : (!row.social_clips?.length ? '—' : null)}
+                </td>
+                <td>{row.speakers?.length ? row.speakers.join(', ') : '—'}</td>
+                <td className="num">{row.day}</td>
+                <td>{stageLabel(row.stage || 'main')}</td>
+                <td className="filename-cell">{row.filename}</td>
+                <td>{row.youtube_url ? <a href={row.youtube_url} target="_blank" rel="noreferrer">Watch</a> : '—'}</td>
+                <td>{row.has_transcript && row.youtube_url ? <a className="transcript-link" href={row.youtube_url} target="_blank" rel="noreferrer" title="Open the source video to view its transcript">View transcript ↗</a> : '—'}</td>
+                <td className="num">{row.mention_count ?? '—'}</td>
+                <td>
+                  {row.drive_full_video?.url ? <a href={row.drive_full_video.url} target="_blank" rel="noreferrer">Full video</a> : '—'}
                 </td>
               </tr>
             ))}
