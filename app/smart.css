@@ -49,17 +49,32 @@
 .topic-titles { margin: 0; color: var(--muted); font-size: 13px; }
 .build-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
 .build-controls .eyebrow { display: block; margin-bottom: 8px; }
+.build-control-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.build-control-heading > span:last-child { color: var(--muted); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
 .pick-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
 .pick-list button { appearance: none; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid var(--line); background: var(--paper); text-align: left; cursor: pointer; }
 .pick-list button span { color: var(--muted); font-size: 11px; }
 .pick-list button.on { border-color: var(--ink); background: var(--ink); color: var(--paper); }
 .pick-list button.on span { color: #cfcfcf; }
+.pick-list button:disabled { cursor: default; opacity: 0.35; }
+.session-destination { margin: 4px 0 8px; padding: 18px; border: 1px solid var(--line); background: var(--soft); }
+.session-destination > .eyebrow { display: block; margin-bottom: 9px; }
+.destination-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.destination-options button { appearance: none; padding: 10px 12px; border: 1px solid var(--line); background: var(--paper); cursor: pointer; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+.destination-options button.on { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.existing-session-select { display: block; max-width: 760px; margin-top: 16px; }
+.existing-session-select > span { display: block; margin-bottom: 7px; color: var(--muted); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; }
+.existing-session-select select { width: 100%; padding: 11px; border: 1px solid var(--line); border-radius: 0; background: var(--paper); color: var(--ink); font: inherit; }
 .suggest-btn { appearance: none; margin: 12px 0 0; padding: 12px 16px; border: 1px solid var(--ink); background: var(--paper); cursor: pointer; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; }
 .suggest-btn:disabled { opacity: 0.4; cursor: default; }
 .suggestion-card { margin-top: 20px; padding: 20px; border: 1px solid var(--ink); background: var(--soft); }
 .suggestion-card h4 { margin: 8px 0 10px; font-family: milling, Inter, sans-serif; font-size: 26px; letter-spacing: -0.03em; }
 .suggestion-card p { max-width: 900px; }
 .suggestion-card ul { padding-left: 18px; color: var(--muted); }
+.suggestion-card .session-meta { margin-top: -4px; color: var(--muted); font-size: 12px; }
+.brief-speakers { margin: 18px 0; }
+.brief-speakers > strong { display: block; margin-bottom: 7px; }
+.brief-speakers ul { margin: 0; }
 @media (max-width: 820px) {
   .build-controls, .workspace-nav.three, .speaker-roster, .add-topic-form, .topic-edit-form { grid-template-columns: 1fr; }
   .smart-block-header { align-items: start; flex-direction: column; gap: 10px; }

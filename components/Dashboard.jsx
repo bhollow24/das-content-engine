@@ -197,9 +197,12 @@ function UpcomingAnalytics({ event, rows }) {
   );
 }
 
-function SmartAgenda({ event, smart }) {
+function SmartAgenda({ event, smart, rows = [] }) {
   const agenda = smart?.[event.id];
   const speakers = agenda?.unplaced || [];
+  const existingSessions = rows
+    .filter((row) => row.state === 'named')
+    .map((row, index) => ({ ...row, id: `${row.day}-${row.time}-${row.track}-${index}` }));
   const [topics, setTopics] = useState(smart?.topics || []);
   const [topicsReady, setTopicsReady] = useState(false);
   const [draggedTopicId, setDraggedTopicId] = useState('');
@@ -207,8 +210,10 @@ function SmartAgenda({ event, smart }) {
   const [newTopic, setNewTopic] = useState({ title: '', description: '' });
   const [editingTopicId, setEditingTopicId] = useState('');
   const [topicDraft, setTopicDraft] = useState({ title: '', description: '' });
-  const [selectedSpeakerId, setSelectedSpeakerId] = useState(speakers[0]?.id || '');
+  const [selectedSpeakerIds, setSelectedSpeakerIds] = useState(speakers[0]?.id ? [speakers[0].id] : []);
   const [selectedTopicId, setSelectedTopicId] = useState(topics[0]?.id || '');
+  const [sessionAction, setSessionAction] = useState('new');
+  const [selectedExistingSessionId, setSelectedExistingSessionId] = useState(existingSessions[0]?.id || '');
   const [showSuggestion, setShowSuggestion] = useState(false);
 
   useEffect(() => {
@@ -234,22 +239,32 @@ function SmartAgenda({ event, smart }) {
     }
   }, [topics, topicsReady]);
 
-  const activeSpeakerId = speakers.some((speaker) => speaker.id === selectedSpeakerId)
-    ? selectedSpeakerId
-    : speakers[0]?.id;
   const activeTopicId = topics.some((topic) => topic.id === selectedTopicId)
     ? selectedTopicId
     : topics[0]?.id;
-  const selectedSpeaker = speakers.find((speaker) => speaker.id === activeSpeakerId);
+  const selectedSpeakers = speakers.filter((speaker) => selectedSpeakerIds.includes(speaker.id));
   const selectedTopic = topics.find((topic) => topic.id === activeTopicId);
+  const activeExistingSessionId = existingSessions.some((session) => session.id === selectedExistingSessionId)
+    ? selectedExistingSessionId
+    : existingSessions[0]?.id;
+  const selectedExistingSession = existingSessions.find((session) => session.id === activeExistingSessionId);
 
-  function chooseSpeaker(id) {
-    setSelectedSpeakerId(id);
+  function toggleSpeaker(id) {
+    setSelectedSpeakerIds((current) => {
+      if (current.includes(id)) return current.filter((speakerId) => speakerId !== id);
+      if (current.length >= 4) return current;
+      return [...current, id];
+    });
     setShowSuggestion(false);
   }
 
   function chooseTopic(id) {
     setSelectedTopicId(id);
+    setShowSuggestion(false);
+  }
+
+  function chooseSessionAction(action) {
+    setSessionAction(action);
     setShowSuggestion(false);
   }
 
@@ -414,17 +429,21 @@ function SmartAgenda({ event, smart }) {
       <section className="smart-block">
         <div className="smart-block-header">
           <div><p className="eyebrow">Pairing tool</p><h3>Build a session</h3></div>
-          <p>Pair an unplaced speaker with a live editorial angle to produce a working session brief.</p>
+          <p>Pair up to four unplaced speakers with a live editorial angle, then place it on the agenda or create a new session.</p>
         </div>
         <div className="build-controls">
           <div>
-            <span className="eyebrow">Choose a speaker</span>
+            <div className="build-control-heading"><span className="eyebrow">Choose speakers</span><span>{selectedSpeakers.length} / 4 selected</span></div>
             <div className="pick-list">
-              {speakers.map((speaker) => (
-                <button type="button" className={activeSpeakerId === speaker.id ? 'on' : ''} aria-pressed={activeSpeakerId === speaker.id} onClick={() => chooseSpeaker(speaker.id)} key={speaker.id}>
-                  {speaker.name}<span>{speaker.company}</span>
-                </button>
-              ))}
+              {speakers.map((speaker) => {
+                const isSelected = selectedSpeakerIds.includes(speaker.id);
+                const isUnavailable = !isSelected && selectedSpeakerIds.length >= 4;
+                return (
+                  <button type="button" className={isSelected ? 'on' : ''} aria-pressed={isSelected} disabled={isUnavailable} onClick={() => toggleSpeaker(speaker.id)} key={speaker.id}>
+                    {speaker.name}<span>{speaker.company}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
           <div>
@@ -438,15 +457,33 @@ function SmartAgenda({ event, smart }) {
             </div>
           </div>
         </div>
-        <button className="suggest-btn" type="button" onClick={() => setShowSuggestion(true)} disabled={!selectedSpeaker || !selectedTopic}>Build working brief</button>
-        {showSuggestion && selectedSpeaker && selectedTopic && (
+        <div className="session-destination">
+          <span className="eyebrow">Choose how to use this topic</span>
+          <div className="destination-options" aria-label="Choose a topic destination">
+            <button type="button" className={sessionAction === 'existing' ? 'on' : ''} aria-pressed={sessionAction === 'existing'} onClick={() => chooseSessionAction('existing')}>Place on existing session</button>
+            <button type="button" className={sessionAction === 'new' ? 'on' : ''} aria-pressed={sessionAction === 'new'} onClick={() => chooseSessionAction('new')}>Create new session</button>
+          </div>
+          {sessionAction === 'existing' && (
+            <label className="existing-session-select">
+              <span>Existing agenda session</span>
+              <select value={activeExistingSessionId || ''} onChange={(selectEvent) => { setSelectedExistingSessionId(selectEvent.target.value); setShowSuggestion(false); }}>
+                {existingSessions.map((session) => <option value={session.id} key={session.id}>{session.title} · {session.day} · {session.time} · {session.track}</option>)}
+              </select>
+            </label>
+          )}
+        </div>
+        <button className="suggest-btn" type="button" onClick={() => setShowSuggestion(true)} disabled={!selectedSpeakers.length || !selectedTopic || (sessionAction === 'existing' && !selectedExistingSession)}>
+          {sessionAction === 'existing' ? 'Build placement brief' : 'Build new session brief'}
+        </button>
+        {showSuggestion && selectedSpeakers.length > 0 && selectedTopic && (sessionAction === 'new' || selectedExistingSession) && (
           <article className="suggestion-card" aria-live="polite">
-            <p className="eyebrow">Working session brief</p>
-            <h4>{selectedTopic.titleIdeas[0]}</h4>
-            <p><strong>Suggested speaker:</strong> {selectedSpeaker.name}, {selectedSpeaker.title ? `${selectedSpeaker.title}, ` : ''}{selectedSpeaker.company}</p>
+            <p className="eyebrow">{sessionAction === 'existing' ? 'Existing session placement' : 'New session brief'}</p>
+            <h4>{sessionAction === 'existing' ? selectedExistingSession.title : (selectedTopic.titleIdeas?.[0] || selectedTopic.topic)}</h4>
+            {sessionAction === 'existing' && <p className="session-meta">{selectedExistingSession.day} · {selectedExistingSession.time} · {selectedExistingSession.track}</p>}
+            <div className="brief-speakers"><strong>Suggested speakers</strong><ul>{selectedSpeakers.map((speaker) => <li key={speaker.id}>{speaker.name}{speaker.title ? `, ${speaker.title}` : ''}, {speaker.company}</li>)}</ul></div>
             <p><strong>Editorial tension:</strong> {selectedTopic.debate}</p>
-            <ul>{selectedTopic.questions.map((question) => <li key={question}>{question}</li>)}</ul>
-            {selectedTopic.titleIdeas[1] && <p className="topic-titles"><strong>Alternate title:</strong> {selectedTopic.titleIdeas[1]}</p>}
+            {selectedTopic.questions?.length ? <ul>{selectedTopic.questions.map((question) => <li key={question}>{question}</li>)}</ul> : null}
+            {sessionAction === 'new' && selectedTopic.titleIdeas?.[1] && <p className="topic-titles"><strong>Alternate title:</strong> {selectedTopic.titleIdeas[1]}</p>}
           </article>
         )}
       </section>
@@ -719,7 +756,7 @@ export default function Dashboard({ data, nyc, smart }) {
             <nav className={`workspace-nav ${event.group === 'upcoming' ? 'three' : ''}`} aria-label="Event tools"><button type="button" className={tool === 'analytics' ? 'on' : ''} onClick={() => navigate(`${event.id}/analytics`)}>Content Analytics</button>{event.group === 'upcoming' && <button type="button" className={tool === 'smart' ? 'on' : ''} onClick={() => navigate(`${event.id}/smart`)}>Smart Agenda</button>}<button type="button" className={tool === 'clips' ? 'on' : ''} onClick={() => navigate(`${event.id}/clips`)}>Clip Library</button></nav>
             <div className="tool-panel on">
               {tool === 'smart' && event.group === 'upcoming'
-                ? <SmartAgenda event={event} smart={smart} />
+                ? <SmartAgenda event={event} smart={smart} rows={data[event.id]} key={event.id} />
                 : tool === 'analytics'
                   ? (event.group === 'past' ? <PastAnalytics mentions={data.mentions} /> : <UpcomingAnalytics event={event} rows={data[event.id]} />)
                   : <ClipLibrary event={event} rows={data[event.id] || []} nyc={nyc} />}
