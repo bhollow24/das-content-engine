@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 import Dashboard from '../components/Dashboard';
 import data from '../lib/data.json';
+import smart from '../lib/smart-agenda.json';
 import d1 from '../lib/nyc-sessions-d1.json';
 import d2 from '../lib/nyc-sessions-d2.json';
 import d3 from '../lib/nyc-sessions-d3.json';
@@ -42,5 +43,5 @@ const nyc = {
 
 export default async function HomePage() {
   await auth.protect();
-  return <Dashboard data={data} nyc={nyc} />;
+  return <Dashboard data={data} nyc={nyc} smart={smart} />;
 }
