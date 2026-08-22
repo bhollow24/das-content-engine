@@ -13,6 +13,7 @@ const EVENTS = {
     date: 'March 2026',
     location: 'New York City',
     description: '94 session transcripts with entity and topic coverage.',
+    wordmark: '/brand/nyc-wordmark-dark.svg',
   },
   asia: {
     id: 'asia',
