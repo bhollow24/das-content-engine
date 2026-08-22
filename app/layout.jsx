@@ -1,5 +1,6 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
+import './smart.css';
 
 export const metadata = {
   title: 'DAS Content Engine',
