@@ -205,6 +205,8 @@ function SmartAgenda({ event, smart }) {
   const [draggedTopicId, setDraggedTopicId] = useState('');
   const [showAddTopic, setShowAddTopic] = useState(false);
   const [newTopic, setNewTopic] = useState({ title: '', description: '' });
+  const [editingTopicId, setEditingTopicId] = useState('');
+  const [topicDraft, setTopicDraft] = useState({ title: '', description: '' });
   const [selectedSpeakerId, setSelectedSpeakerId] = useState(speakers[0]?.id || '');
   const [selectedTopicId, setSelectedTopicId] = useState(topics[0]?.id || '');
   const [showSuggestion, setShowSuggestion] = useState(false);
@@ -295,6 +297,36 @@ function SmartAgenda({ event, smart }) {
     setShowSuggestion(false);
   }
 
+  function startEditingTopic(topic) {
+    setEditingTopicId(topic.id);
+    setTopicDraft({ title: topic.topic, description: topic.debate });
+    setShowAddTopic(false);
+    setShowSuggestion(false);
+  }
+
+  function cancelEditingTopic() {
+    setEditingTopicId('');
+    setTopicDraft({ title: '', description: '' });
+  }
+
+  function saveTopic(event, topicId) {
+    event.preventDefault();
+    const title = topicDraft.title.trim();
+    const description = topicDraft.description.trim();
+    if (!title || !description) return;
+    setTopics((current) => current.map((topic) => (
+      topic.id === topicId
+        ? {
+            ...topic,
+            topic: title,
+            debate: description,
+            titleIdeas: topic.source === 'custom' ? [title] : topic.titleIdeas,
+          }
+        : topic
+    )));
+    cancelEditingTopic();
+  }
+
   if (!agenda) return <p className="table-empty">No Smart Agenda snapshot is available for this event.</p>;
 
   return (
@@ -340,7 +372,7 @@ function SmartAgenda({ event, smart }) {
           {topics.map((topic, index) => (
             <div
               className={`topic-row ${draggedTopicId === topic.id ? 'dragging' : ''}`}
-              draggable
+              draggable={editingTopicId !== topic.id}
               onDragStart={() => setDraggedTopicId(topic.id)}
               onDragOver={(dragEvent) => dragEvent.preventDefault()}
               onDrop={(dragEvent) => { dragEvent.preventDefault(); reorderTopic(draggedTopicId, topic.id); setDraggedTopicId(''); }}
@@ -348,17 +380,29 @@ function SmartAgenda({ event, smart }) {
               key={topic.id}
             >
               <span className="drag-handle" aria-hidden="true" title="Drag to reorder">⋮⋮</span>
-              <details className="topic-card">
-                <summary>
-                  <span className="topic-preview"><strong>{topic.topic}</strong><span>{topic.debate}</span></span>
-                  <span className="expand-label">Details</span>
-                </summary>
-                <div className="topic-details">
-                  {topic.questions?.length ? <><p className="eyebrow">Questions to answer</p><ul>{topic.questions.map((question) => <li key={question}>{question}</li>)}</ul></> : <p className="muted">No discussion questions added yet.</p>}
-                  {topic.titleIdeas?.length ? <p className="topic-titles"><strong>Title directions:</strong> {topic.titleIdeas.join(' / ')}</p> : null}
-                </div>
-              </details>
-              <span className="topic-order-controls">
+              {editingTopicId === topic.id ? (
+                <form className="topic-edit-form" onSubmit={(submitEvent) => saveTopic(submitEvent, topic.id)}>
+                  <label><span>Topic title</span><input value={topicDraft.title} onChange={(inputEvent) => setTopicDraft((current) => ({ ...current, title: inputEvent.target.value }))} required autoFocus /></label>
+                  <label><span>Description</span><textarea value={topicDraft.description} onChange={(inputEvent) => setTopicDraft((current) => ({ ...current, description: inputEvent.target.value }))} rows="3" required /></label>
+                  <span className="topic-edit-actions">
+                    <button type="submit">Save</button>
+                    <button type="button" onClick={cancelEditingTopic}>Cancel</button>
+                  </span>
+                </form>
+              ) : (
+                <details className="topic-card">
+                  <summary>
+                    <span className="topic-preview"><strong>{topic.topic}</strong><span>{topic.debate}</span></span>
+                    <span className="expand-label">Details</span>
+                  </summary>
+                  <div className="topic-details">
+                    {topic.questions?.length ? <><p className="eyebrow">Questions to answer</p><ul>{topic.questions.map((question) => <li key={question}>{question}</li>)}</ul></> : <p className="muted">No discussion questions added yet.</p>}
+                    {topic.titleIdeas?.length ? <p className="topic-titles"><strong>Title directions:</strong> {topic.titleIdeas.join(' / ')}</p> : null}
+                  </div>
+                </details>
+              )}
+              <span className="topic-row-actions">
+                <button className="edit-topic-btn" type="button" onClick={() => startEditingTopic(topic)} disabled={editingTopicId === topic.id}>Edit</button>
                 <button type="button" aria-label={`Move ${topic.topic} up`} disabled={index === 0} onClick={() => moveTopic(topic.id, -1)}>↑</button>
                 <button type="button" aria-label={`Move ${topic.topic} down`} disabled={index === topics.length - 1} onClick={() => moveTopic(topic.id, 1)}>↓</button>
               </span>
