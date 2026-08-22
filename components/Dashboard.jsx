@@ -197,6 +197,120 @@ function UpcomingAnalytics({ event, rows }) {
   );
 }
 
+function SmartAgenda({ event, smart }) {
+  const agenda = smart?.[event.id];
+  const speakers = agenda?.unplaced || [];
+  const topics = smart?.topics || [];
+  const [selectedSpeakerId, setSelectedSpeakerId] = useState(speakers[0]?.id || '');
+  const [selectedTopicId, setSelectedTopicId] = useState(topics[0]?.id || '');
+  const [showSuggestion, setShowSuggestion] = useState(false);
+
+  const activeSpeakerId = speakers.some((speaker) => speaker.id === selectedSpeakerId)
+    ? selectedSpeakerId
+    : speakers[0]?.id;
+  const activeTopicId = topics.some((topic) => topic.id === selectedTopicId)
+    ? selectedTopicId
+    : topics[0]?.id;
+  const selectedSpeaker = speakers.find((speaker) => speaker.id === activeSpeakerId);
+  const selectedTopic = topics.find((topic) => topic.id === activeTopicId);
+
+  function chooseSpeaker(id) {
+    setSelectedSpeakerId(id);
+    setShowSuggestion(false);
+  }
+
+  function chooseTopic(id) {
+    setSelectedTopicId(id);
+    setShowSuggestion(false);
+  }
+
+  if (!agenda) return <p className="table-empty">No Smart Agenda snapshot is available for this event.</p>;
+
+  return (
+    <>
+      <Stats items={[
+        [agenda.inCount, 'speakers marked In'],
+        [agenda.placedCount, 'placed on agenda'],
+        [speakers.length, 'still unplaced'],
+        [topics.length, 'topic angles'],
+      ]} />
+
+      <section className="smart-block">
+        <div className="smart-block-header">
+          <div><p className="eyebrow">Programming gap</p><h3>Unplaced speakers</h3></div>
+          <p>{speakers.length} confirmed speakers are not yet matched to an agenda slot.</p>
+        </div>
+        <div className="speaker-roster">
+          {speakers.map((speaker) => (
+            <article className="speaker-card" key={speaker.id}>
+              <div><h4>{speaker.name}</h4><p>{speaker.title || 'Role not listed'} · {speaker.company}</p></div>
+              {speaker.staff && <span className="pill hold">Blockworks</span>}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="smart-block">
+        <div className="smart-block-header">
+          <div><p className="eyebrow">Editorial bank</p><h3>Topics with tension</h3></div>
+          <p>Questions, debate framing, and title directions ready for agenda development.</p>
+        </div>
+        <div className="topic-grid">
+          {topics.map((topic) => (
+            <article className="topic-card" key={topic.id}>
+              <p className="eyebrow">Topic angle</p>
+              <h4>{topic.topic}</h4>
+              <p className="topic-debate">{topic.debate}</p>
+              <ul>{topic.questions.map((question) => <li key={question}>{question}</li>)}</ul>
+              <p className="topic-titles"><strong>Title directions:</strong> {topic.titleIdeas.join(' / ')}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="smart-block">
+        <div className="smart-block-header">
+          <div><p className="eyebrow">Pairing tool</p><h3>Build a session</h3></div>
+          <p>Pair an unplaced speaker with a live editorial angle to produce a working session brief.</p>
+        </div>
+        <div className="build-controls">
+          <div>
+            <span className="eyebrow">Choose a speaker</span>
+            <div className="pick-list">
+              {speakers.map((speaker) => (
+                <button type="button" className={activeSpeakerId === speaker.id ? 'on' : ''} aria-pressed={activeSpeakerId === speaker.id} onClick={() => chooseSpeaker(speaker.id)} key={speaker.id}>
+                  {speaker.name}<span>{speaker.company}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className="eyebrow">Choose a topic</span>
+            <div className="pick-list">
+              {topics.map((topic) => (
+                <button type="button" className={activeTopicId === topic.id ? 'on' : ''} aria-pressed={activeTopicId === topic.id} onClick={() => chooseTopic(topic.id)} key={topic.id}>
+                  {topic.topic}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <button className="suggest-btn" type="button" onClick={() => setShowSuggestion(true)} disabled={!selectedSpeaker || !selectedTopic}>Build working brief</button>
+        {showSuggestion && selectedSpeaker && selectedTopic && (
+          <article className="suggestion-card" aria-live="polite">
+            <p className="eyebrow">Working session brief</p>
+            <h4>{selectedTopic.titleIdeas[0]}</h4>
+            <p><strong>Suggested speaker:</strong> {selectedSpeaker.name}, {selectedSpeaker.title ? `${selectedSpeaker.title}, ` : ''}{selectedSpeaker.company}</p>
+            <p><strong>Editorial tension:</strong> {selectedTopic.debate}</p>
+            <ul>{selectedTopic.questions.map((question) => <li key={question}>{question}</li>)}</ul>
+            {selectedTopic.titleIdeas[1] && <p className="topic-titles"><strong>Alternate title:</strong> {selectedTopic.titleIdeas[1]}</p>}
+          </article>
+        )}
+      </section>
+    </>
+  );
+}
+
 function NycClipLibrary({ nyc }) {
   const [dayFilter, setDayFilter] = useState('Day 1');
   const [stageFilter, setStageFilter] = useState('main');
@@ -377,7 +491,7 @@ function ClipLibrary({ event, rows, nyc }) {
   );
 }
 
-export default function Dashboard({ data, nyc }) {
+export default function Dashboard({ data, nyc, smart }) {
   const [route, setRoute] = useState('home');
 
   useEffect(() => {
@@ -395,8 +509,9 @@ export default function Dashboard({ data, nyc }) {
 
   const [eventId, toolName] = route.split('/');
   const event = EVENTS[eventId];
-  const tool = toolName === 'clips' ? 'clips' : 'analytics';
+  const tool = toolName === 'clips' ? 'clips' : toolName === 'smart' && event?.group === 'upcoming' ? 'smart' : 'analytics';
   const group = GROUPS[route];
+  const toolLabel = tool === 'clips' ? 'Clip Library' : tool === 'smart' ? 'Smart Agenda' : 'Content Analytics';
 
   let eyebrow = 'Events';
   let title = 'DAS Content Engine';
@@ -406,7 +521,7 @@ export default function Dashboard({ data, nyc }) {
     subtitle = group.intro;
   } else if (event) {
     eyebrow = GROUPS[event.group].title;
-    title = tool === 'clips' ? 'Clip Library' : 'Content Analytics';
+    title = toolLabel;
     subtitle = `${event.title} · ${event.date} · ${event.location}`;
   }
 
@@ -429,7 +544,7 @@ export default function Dashboard({ data, nyc }) {
             <div className="section-heading"><h2>Events</h2></div>
             <div className="choice-grid">
               <button className="choice-card past-card" type="button" onClick={() => navigate('past')}><span className="choice-index">01</span><span className="choice-label">Past Events</span><span className="choice-meta"><span>Content Analytics</span><span>Clip Library</span></span><span className="choice-arrow" aria-hidden="true">→</span></button>
-              <button className="choice-card upcoming-card" type="button" onClick={() => navigate('upcoming')}><span className="choice-index">02</span><span className="choice-label">Upcoming Events</span><span className="choice-meta"><span>Content Analytics</span><span>Clip Library</span></span><span className="choice-arrow" aria-hidden="true">→</span></button>
+              <button className="choice-card upcoming-card" type="button" onClick={() => navigate('upcoming')}><span className="choice-index">02</span><span className="choice-label">Upcoming Events</span><span className="choice-meta"><span>Content Analytics</span><span>Smart Agenda</span><span>Clip Library</span></span><span className="choice-arrow" aria-hidden="true">→</span></button>
             </div>
             <div className="home-status"><div><strong>94</strong><span>past sessions transcribed</span></div><div><strong>2</strong><span>upcoming events</span></div><div><strong>118</strong><span>entities detected</span></div><div><strong>102</strong><span>NYC videos listed</span></div></div>
           </section>
@@ -442,7 +557,7 @@ export default function Dashboard({ data, nyc }) {
             <div className="event-grid">
               {Object.values(EVENTS).filter((item) => item.group === route).map((item) => (
                 <button className="event-card" type="button" onClick={() => navigate(`${item.id}/analytics`)} key={item.id}>
-                  <span className="event-state">{item.date} · {item.location}</span><h3>{item.title}</h3><p>{item.description}</p><span className="event-tools"><span>Content Analytics</span><span>Clip Library</span></span><span className="event-arrow" aria-hidden="true">→</span>
+                  <span className="event-state">{item.date} · {item.location}</span><h3>{item.title}</h3><p>{item.description}</p><span className="event-tools"><span>Content Analytics</span>{item.group === 'upcoming' && <span>Smart Agenda</span>}<span>Clip Library</span></span><span className="event-arrow" aria-hidden="true">→</span>
                 </button>
               ))}
             </div>
@@ -456,11 +571,15 @@ export default function Dashboard({ data, nyc }) {
               <div className="workspace-mark-wrap">
                 {event.wordmark ? <Image className="workspace-wordmark on" src={event.wordmark} alt={event.title} width={240} height={72} /> : <div className="workspace-text-mark"><span>DAS</span><small>{event.city}</small></div>}
               </div>
-              <div><p className="eyebrow">{GROUPS[event.group].title} · {tool === 'clips' ? 'Clip Library' : 'Content Analytics'}</p><h2>{event.title}</h2><p className="section-intro">{event.date} · {event.location}</p></div>
+              <div><p className="eyebrow">{GROUPS[event.group].title} · {toolLabel}</p><h2>{event.title}</h2><p className="section-intro">{event.date} · {event.location}</p></div>
             </div>
-            <nav className="workspace-nav" aria-label="Event tools"><button type="button" className={tool === 'analytics' ? 'on' : ''} onClick={() => navigate(`${event.id}/analytics`)}>Content Analytics</button><button type="button" className={tool === 'clips' ? 'on' : ''} onClick={() => navigate(`${event.id}/clips`)}>Clip Library</button></nav>
+            <nav className={`workspace-nav ${event.group === 'upcoming' ? 'three' : ''}`} aria-label="Event tools"><button type="button" className={tool === 'analytics' ? 'on' : ''} onClick={() => navigate(`${event.id}/analytics`)}>Content Analytics</button>{event.group === 'upcoming' && <button type="button" className={tool === 'smart' ? 'on' : ''} onClick={() => navigate(`${event.id}/smart`)}>Smart Agenda</button>}<button type="button" className={tool === 'clips' ? 'on' : ''} onClick={() => navigate(`${event.id}/clips`)}>Clip Library</button></nav>
             <div className="tool-panel on">
-              {tool === 'analytics' ? (event.group === 'past' ? <PastAnalytics mentions={data.mentions} /> : <UpcomingAnalytics event={event} rows={data[event.id]} />) : <ClipLibrary event={event} rows={data[event.id] || []} nyc={nyc} />}
+              {tool === 'smart' && event.group === 'upcoming'
+                ? <SmartAgenda event={event} smart={smart} />
+                : tool === 'analytics'
+                  ? (event.group === 'past' ? <PastAnalytics mentions={data.mentions} /> : <UpcomingAnalytics event={event} rows={data[event.id]} />)
+                  : <ClipLibrary event={event} rows={data[event.id] || []} nyc={nyc} />}
             </div>
           </section>
         )}
