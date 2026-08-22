@@ -200,10 +200,37 @@ function UpcomingAnalytics({ event, rows }) {
 function SmartAgenda({ event, smart }) {
   const agenda = smart?.[event.id];
   const speakers = agenda?.unplaced || [];
-  const topics = smart?.topics || [];
+  const [topics, setTopics] = useState(smart?.topics || []);
+  const [topicsReady, setTopicsReady] = useState(false);
+  const [draggedTopicId, setDraggedTopicId] = useState('');
+  const [showAddTopic, setShowAddTopic] = useState(false);
+  const [newTopic, setNewTopic] = useState({ title: '', description: '' });
   const [selectedSpeakerId, setSelectedSpeakerId] = useState(speakers[0]?.id || '');
   const [selectedTopicId, setSelectedTopicId] = useState(topics[0]?.id || '');
   const [showSuggestion, setShowSuggestion] = useState(false);
+
+  useEffect(() => {
+    try {
+      const savedTopics = window.localStorage.getItem('das-smart-topics-v1');
+      if (savedTopics) {
+        const parsed = JSON.parse(savedTopics);
+        if (Array.isArray(parsed) && parsed.length) setTopics(parsed);
+      }
+    } catch {
+      // Keep the bundled topic snapshot if browser storage is unavailable or invalid.
+    } finally {
+      setTopicsReady(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!topicsReady) return;
+    try {
+      window.localStorage.setItem('das-smart-topics-v1', JSON.stringify(topics));
+    } catch {
+      // Topic editing remains available for the current session when storage is unavailable.
+    }
+  }, [topics, topicsReady]);
 
   const activeSpeakerId = speakers.some((speaker) => speaker.id === selectedSpeakerId)
     ? selectedSpeakerId
@@ -221,6 +248,50 @@ function SmartAgenda({ event, smart }) {
 
   function chooseTopic(id) {
     setSelectedTopicId(id);
+    setShowSuggestion(false);
+  }
+
+  function reorderTopic(sourceId, targetId) {
+    if (!sourceId || sourceId === targetId) return;
+    setTopics((current) => {
+      const sourceIndex = current.findIndex((topic) => topic.id === sourceId);
+      const targetIndex = current.findIndex((topic) => topic.id === targetId);
+      if (sourceIndex < 0 || targetIndex < 0) return current;
+      const next = [...current];
+      const [moved] = next.splice(sourceIndex, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
+    });
+  }
+
+  function moveTopic(topicId, direction) {
+    setTopics((current) => {
+      const index = current.findIndex((topic) => topic.id === topicId);
+      const target = index + direction;
+      if (index < 0 || target < 0 || target >= current.length) return current;
+      const next = [...current];
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
+  }
+
+  function addTopic(event) {
+    event.preventDefault();
+    const title = newTopic.title.trim();
+    const description = newTopic.description.trim();
+    if (!title || !description) return;
+    const topic = {
+      id: `custom-${Date.now()}`,
+      topic: title,
+      debate: description,
+      questions: [],
+      titleIdeas: [title],
+      source: 'custom',
+    };
+    setTopics((current) => [...current, topic]);
+    setSelectedTopicId(topic.id);
+    setNewTopic({ title: '', description: '' });
+    setShowAddTopic(false);
     setShowSuggestion(false);
   }
 
@@ -252,18 +323,46 @@ function SmartAgenda({ event, smart }) {
 
       <section className="smart-block">
         <div className="smart-block-header">
-          <div><p className="eyebrow">Editorial bank</p><h3>Topics with tension</h3></div>
-          <p>Questions, debate framing, and title directions ready for agenda development.</p>
+          <div><p className="eyebrow">Editorial bank</p><h3>Hot Topics</h3></div>
+          <div className="topic-header-actions">
+            <span>Drag to reorder · saved in this browser</span>
+            <button className="add-topic-btn" type="button" onClick={() => setShowAddTopic((current) => !current)}>{showAddTopic ? 'Cancel' : '+ Add topic'}</button>
+          </div>
         </div>
-        <div className="topic-grid">
-          {topics.map((topic) => (
-            <article className="topic-card" key={topic.id}>
-              <p className="eyebrow">Topic angle</p>
-              <h4>{topic.topic}</h4>
-              <p className="topic-debate">{topic.debate}</p>
-              <ul>{topic.questions.map((question) => <li key={question}>{question}</li>)}</ul>
-              <p className="topic-titles"><strong>Title directions:</strong> {topic.titleIdeas.join(' / ')}</p>
-            </article>
+        {showAddTopic && (
+          <form className="add-topic-form" onSubmit={addTopic}>
+            <label><span>Topic title</span><input value={newTopic.title} onChange={(inputEvent) => setNewTopic((current) => ({ ...current, title: inputEvent.target.value }))} placeholder="e.g. Institutional DeFi credit" required /></label>
+            <label><span>Description</span><textarea value={newTopic.description} onChange={(inputEvent) => setNewTopic((current) => ({ ...current, description: inputEvent.target.value }))} placeholder="What is the tension, question, or market shift?" rows="3" required /></label>
+            <button className="suggest-btn" type="submit">Add to Hot Topics</button>
+          </form>
+        )}
+        <div className="topic-list">
+          {topics.map((topic, index) => (
+            <div
+              className={`topic-row ${draggedTopicId === topic.id ? 'dragging' : ''}`}
+              draggable
+              onDragStart={() => setDraggedTopicId(topic.id)}
+              onDragOver={(dragEvent) => dragEvent.preventDefault()}
+              onDrop={(dragEvent) => { dragEvent.preventDefault(); reorderTopic(draggedTopicId, topic.id); setDraggedTopicId(''); }}
+              onDragEnd={() => setDraggedTopicId('')}
+              key={topic.id}
+            >
+              <span className="drag-handle" aria-hidden="true" title="Drag to reorder">⋮⋮</span>
+              <details className="topic-card">
+                <summary>
+                  <span className="topic-preview"><strong>{topic.topic}</strong><span>{topic.debate}</span></span>
+                  <span className="expand-label">Details</span>
+                </summary>
+                <div className="topic-details">
+                  {topic.questions?.length ? <><p className="eyebrow">Questions to answer</p><ul>{topic.questions.map((question) => <li key={question}>{question}</li>)}</ul></> : <p className="muted">No discussion questions added yet.</p>}
+                  {topic.titleIdeas?.length ? <p className="topic-titles"><strong>Title directions:</strong> {topic.titleIdeas.join(' / ')}</p> : null}
+                </div>
+              </details>
+              <span className="topic-order-controls">
+                <button type="button" aria-label={`Move ${topic.topic} up`} disabled={index === 0} onClick={() => moveTopic(topic.id, -1)}>↑</button>
+                <button type="button" aria-label={`Move ${topic.topic} down`} disabled={index === topics.length - 1} onClick={() => moveTopic(topic.id, 1)}>↓</button>
+              </span>
+            </div>
           ))}
         </div>
       </section>
