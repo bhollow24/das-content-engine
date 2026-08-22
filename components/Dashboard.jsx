@@ -221,7 +221,8 @@ function NycClipLibrary({ nyc }) {
   const visible = rows.filter((row) => {
     const dayLabel = `Day ${row.day}`;
     const matchesFilter = filter === 'All' || filter === dayLabel || (row.stage || 'main') === filter;
-    const haystack = `${row.title} ${row.stage || ''} ${row.filename || ''} ${row.track || ''} ${row.kind}`.toLowerCase();
+    const clipHay = (row.social_clips || []).map((clip) => `${clip.lastNameToken || ''} ${clip.driveTitle || ''}`).join(' ');
+    const haystack = `${row.title} ${row.stage || ''} ${row.filename || ''} ${row.track || ''} ${row.kind} ${clipHay}`.toLowerCase();
     return matchesFilter && (!search || haystack.includes(search.toLowerCase()));
   });
   const namedDrive = sessions.filter((session) => session.drive_full_video).length;
@@ -233,13 +234,14 @@ function NycClipLibrary({ nyc }) {
         [sessions.length, 'sessions transcribed'],
         [playlistOnly.length, 'YouTube only'],
         [namedDrive, 'named Drive videos'],
-        [driveSocial.total || 133, 'unmapped social clips'],
+        [driveSocial.total ?? 89, 'unmapped social clips'],
+        [driveSocial.day1Mapped ?? nyc?.clipsDay1?.mappedSocialCount ?? 44, 'mapped Day 1 clips'],
       ]} />
-      <div className="call">Proposed names use <strong>Eventcode_day_stage_titleslug</strong>. Numbered Twitter-export clips are not assigned to sessions yet. Drive files have not been renamed.</div>
+      <div className="call">Day 1 social clips are mapped. Drive files have not been renamed. Proposed names shown.</div>
       <div className="toolbar">
         <label className="search-field">
           <span className="sr-only">Search clip library</span>
-          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search title, stage, or filename" autoComplete="off" />
+          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search title, stage, filename, or clip" autoComplete="off" />
         </label>
         <Filters labels={filters} value={filter} onChange={setFilter} />
       </div>
@@ -267,7 +269,17 @@ function NycClipLibrary({ nyc }) {
                 <td>{row.youtube_url ? <a href={row.youtube_url} target="_blank" rel="noreferrer">Watch</a> : '—'}</td>
                 <td>{row.has_transcript ? 'Yes' : 'No'}</td>
                 <td className="num">{row.mention_count ?? '—'}</td>
-                <td>{row.drive_full_video?.url ? <a href={row.drive_full_video.url} target="_blank" rel="noreferrer">File</a> : '—'}</td>
+                <td>
+                  {row.social_clips?.length ? (
+                    <div className="drive-clips">
+                      <span>{row.social_clips.length} clips</span>
+                      {row.social_clips.map((clip) => (
+                        <a key={clip.fileId} href={clip.url} target="_blank" rel="noreferrer">{clip.driveTitle || clip.filename}</a>
+                      ))}
+                    </div>
+                  ) : null}
+                  {row.drive_full_video?.url ? <a href={row.drive_full_video.url} target="_blank" rel="noreferrer">File</a> : (!row.social_clips?.length ? '—' : null)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -276,9 +288,9 @@ function NycClipLibrary({ nyc }) {
       {!visible.length && <p className="table-empty">No sessions match those filters.</p>}
       <div className="social-clip-block">
         <h3>Unmapped social clips</h3>
-        <p>133 numbered Twitter-export files. Same day only. Not matched to a session yet.</p>
+        <p>Day 1 social clips are mapped. Remaining unmapped clips are Day 2 and Day 3. Drive files have not been renamed.</p>
         <div className="social-folders">
-          <a href={folders.day1} target="_blank" rel="noreferrer"><strong>Day 1</strong><span>{driveSocial.day1 || 44} clips</span></a>
+          <a href={folders.day1} target="_blank" rel="noreferrer"><strong>Day 1</strong><span>44 mapped / 0 unmapped</span></a>
           <a href={folders.day2} target="_blank" rel="noreferrer"><strong>Day 2</strong><span>{driveSocial.day2 || 45} clips</span></a>
           <a href={folders.day3} target="_blank" rel="noreferrer"><strong>Day 3</strong><span>{driveSocial.day3 || 44} clips</span></a>
         </div>

@@ -90,16 +90,17 @@
     }
   ],
   "driveSocial": {
-    "day1": 44,
+    "day1": 0,
+    "day1Mapped": 44,
     "day2": 45,
     "day3": 44,
-    "total": 133,
+    "total": 89,
     "fullSessionNamed": 2,
     "folders": {
       "day1": "https://drive.google.com/drive/folders/1P1of6O5yNCJ-sQ17G7LgtHdZY6UYSJJ-",
       "day2": "https://drive.google.com/drive/folders/1g-3l15dU3R82OMkvzjmq7FLhzPL7E6Ft",
       "day3": "https://drive.google.com/drive/folders/15DfARnDRGq7sRfUddwvzNQskyoDfYTgT"
     },
-    "note": "Numbered 2026TwitterExport / SocialClip files. Not assigned to sessions. Do not invent clip-to-session mappings. Day 1 includes Clip23.5 (44 social clips, not 43)."
+    "note": "Day 1 social clips mapped (44). Drive files have not been renamed. Day 2+3 remain unmapped (89)."
   }
 }
