@@ -222,7 +222,8 @@ function NycClipLibrary({ nyc }) {
     const dayLabel = `Day ${row.day}`;
     const matchesFilter = filter === 'All' || filter === dayLabel || (row.stage || 'main') === filter;
     const clipHay = (row.social_clips || []).map((clip) => `${clip.lastNameToken || ''} ${clip.driveTitle || ''}`).join(' ');
-    const haystack = `${row.title} ${row.stage || ''} ${row.filename || ''} ${row.track || ''} ${row.kind} ${clipHay}`.toLowerCase();
+    const speakerHay = (row.speakers || []).join(' ');
+    const haystack = `${row.title} ${speakerHay} ${row.stage || ''} ${row.filename || ''} ${row.track || ''} ${row.kind} ${clipHay}`.toLowerCase();
     return matchesFilter && (!search || haystack.includes(search.toLowerCase()));
   });
   const namedDrive = sessions.filter((session) => session.drive_full_video).length;
@@ -241,7 +242,7 @@ function NycClipLibrary({ nyc }) {
       <div className="toolbar">
         <label className="search-field">
           <span className="sr-only">Search clip library</span>
-          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search title, stage, filename, or clip" autoComplete="off" />
+          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search title, speaker, stage, filename, or clip" autoComplete="off" />
         </label>
         <Filters labels={filters} value={filter} onChange={setFilter} />
       </div>
@@ -250,6 +251,7 @@ function NycClipLibrary({ nyc }) {
           <thead>
             <tr>
               <th>Session</th>
+              <th>Speakers</th>
               <th>Day</th>
               <th>Stage</th>
               <th>Filename</th>
@@ -263,6 +265,7 @@ function NycClipLibrary({ nyc }) {
             {visible.map((row) => (
               <tr key={row.youtube_id || row.filename}>
                 <td>{row.title}<div className="type">{row.kind}</div></td>
+                <td>{row.speakers?.length ? row.speakers.join(', ') : '—'}</td>
                 <td className="num">{row.day}</td>
                 <td>{row.stage || 'main'}</td>
                 <td className="filename-cell">{row.filename}</td>
