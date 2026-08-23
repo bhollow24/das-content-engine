@@ -236,7 +236,7 @@ export default function Dashboard({ data, nyc, smart }) {
             </nav>
             <div className="tool-panel on">
               {tool === 'smart' && showSmart ? (
-                <SmartAgenda event={event} rows={data[event.id] || []} pack={smart?.[event.id]} topics={smart?.topics || []} />
+                <SmartAgenda event={event} rows={data[event.id] || []} pack={smart?.[event.id]} topics={smart?.topics || []} hotTopics={smart?.hotTopics?.[event.id] || []} />
               ) : tool === 'analytics' ? (event.group === 'past' ? <PastAnalytics mentions={data.mentions} /> : <UpcomingAnalytics event={event} rows={data[event.id]} />) : (
                 <ClipLibrary event={event} rows={data[event.id] || []} nyc={nyc} />
               )}

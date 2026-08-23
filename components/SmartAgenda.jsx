@@ -76,13 +76,15 @@ function parseMinutes(title) {
   return match ? Number(match[1]) : null;
 }
 
-export default function SmartAgenda({ event, rows, pack, topics }) {
+export default function SmartAgenda({ event, rows, pack, topics, hotTopics }) {
   const unplaced = pack?.unplaced || [];
   const [speakerQuery, setSpeakerQuery] = useState('');
   const [picked, setPicked] = useState([]);
   const [length, setLength] = useState(30);
   const [format, setFormat] = useState('Panel');
+  const [hotTopic, setHotTopic] = useState('');
   const [suggestion, setSuggestion] = useState(null);
+  const eventTopics = hotTopics || [];
 
   const visibleSpeakers = unplaced.filter((person) => {
     const hay = `${person.name} ${person.company} ${person.title}`.toLowerCase();
@@ -108,8 +110,9 @@ export default function SmartAgenda({ event, rows, pack, topics }) {
     const companies = selected.map((person) => person.company).filter(Boolean);
     const names = selected.map((person) => person.name);
     const last = names.map((name) => name.trim().split(/\s+/).slice(-1)[0]);
-    const titleA = companies.length >= 2 ? `${companies[0]} vs ${companies[1]}: Who Sets the Terms` : `${names[0]} and the Institutional Question`;
-    const titleB = last.length >= 2 ? `${last[0]} and ${last[1]} on What Still Does Not Work` : 'A Session Built from Unplaced Confirmed Speakers';
+    const theme = hotTopic || 'the institutional question';
+    const titleA = companies.length >= 2 ? `${companies[0]} vs ${companies[1]}: ${hotTopic || 'Who Sets the Terms'}` : `${names[0]} on ${theme}`;
+    const titleB = last.length >= 2 ? `${last[0]} and ${last[1]} on ${theme}` : (hotTopic || 'A Session Built from Unplaced Confirmed Speakers');
     const openRows = rows.filter((row) => {
       const minutes = parseMinutes(row.title);
       const isOpenish = row.state === 'open' || row.status === 'Open' || String(row.title).toLowerCase().startsWith('open');
@@ -165,8 +168,17 @@ export default function SmartAgenda({ event, rows, pack, topics }) {
       <section className="smart-block">
         <div className="section-heading">
           <p className="eyebrow">03</p>
-          <h3>Topics, questions, debates</h3>
-          <p className="section-intro">Seed list for editorial sessions. Bennett can add more via chat. This is not an X live pull.</p>
+          <h3>Editorial bank</h3>
+          <p className="section-intro">Event hot topics from the content overview, plus the seed list for editorial sessions. Bennett can add more via chat. This is not an X live pull.</p>
+        </div>
+        <div className="hot-topics">
+          <span className="eyebrow">Hot topics</span>
+          <div className="filters">
+            {eventTopics.map((label) => (
+              <button type="button" key={label} className={hotTopic === label ? 'on' : ''} onClick={() => { setHotTopic((current) => current === label ? '' : label); setSuggestion(null); }}>{label}</button>
+            ))}
+          </div>
+          {!eventTopics.length && <p className="muted">No hot topics loaded for this event.</p>}
         </div>
         <div className="topic-grid">
           {(topics || []).map((item) => (
@@ -217,6 +229,7 @@ export default function SmartAgenda({ event, rows, pack, topics }) {
             <p className="eyebrow">Suggestion only / not written to Airtable</p>
             <h4>{suggestion.titles[0]}</h4>
             <p>Alt title: {suggestion.titles[1]}</p>
+            {hotTopic && <p>Hot topic: {hotTopic}</p>}
             <p>{suggestion.format} / {suggestion.length} minutes</p>
             <p>{suggestion.speakers.map((person) => `${person.name} (${person.company})`).join(' / ')}</p>
             <p>{suggestion.placement}</p>

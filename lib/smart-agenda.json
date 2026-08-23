@@ -1,43 +1,310 @@
 {
   "asia": {
     "unplaced": [
-      {"id": "rec0iYx840rGBhfsN", "name": "Ness", "company": "Hyperlend", "title": "", "staff": false},
-      {"id": "rec4jRt1SdDhS93W2", "name": "Vladimir Novakovski", "company": "Lighter", "title": "Founder & CEO", "staff": false},
-      {"id": "rechAPe0ddHPiKexv", "name": "Johann Kerbrat", "company": "Robinhood", "title": "SVP & GM of Crypto", "staff": false},
-      {"id": "recmlX9abieWzC8y7", "name": "Carolyn Wyatt", "company": "Blockworks", "title": "Event Manager", "staff": true},
-      {"id": "reco9ysoHWF2qcCU3", "name": "Ken Ng", "company": "Uniswap", "title": "Head of Ecosystem", "staff": false},
-      {"id": "recou4idsGDUU7qtq", "name": "Bennett Holloway", "company": "Blockworks", "title": "Head of Events", "staff": true},
-      {"id": "recuqXFfglETOMKUt", "name": "John Nahas", "company": "Ava Labs", "title": "Chief Business Officer", "staff": false}
+      {
+        "id": "rec0iYx840rGBhfsN",
+        "name": "Ness",
+        "company": "Hyperlend",
+        "title": "",
+        "staff": false
+      },
+      {
+        "id": "rec4jRt1SdDhS93W2",
+        "name": "Vladimir Novakovski",
+        "company": "Lighter",
+        "title": "Founder & CEO",
+        "staff": false
+      },
+      {
+        "id": "rechAPe0ddHPiKexv",
+        "name": "Johann Kerbrat",
+        "company": "Robinhood",
+        "title": "SVP & GM of Crypto",
+        "staff": false
+      },
+      {
+        "id": "recmlX9abieWzC8y7",
+        "name": "Carolyn Wyatt",
+        "company": "Blockworks",
+        "title": "Event Manager",
+        "staff": true
+      },
+      {
+        "id": "reco9ysoHWF2qcCU3",
+        "name": "Ken Ng",
+        "company": "Uniswap",
+        "title": "Head of Ecosystem",
+        "staff": false
+      },
+      {
+        "id": "recou4idsGDUU7qtq",
+        "name": "Bennett Holloway",
+        "company": "Blockworks",
+        "title": "Head of Events",
+        "staff": true
+      },
+      {
+        "id": "recuqXFfglETOMKUt",
+        "name": "John Nahas",
+        "company": "Ava Labs",
+        "title": "Chief Business Officer",
+        "staff": false
+      }
     ],
     "placedCount": 43,
     "inCount": 50
   },
   "london": {
     "unplaced": [
-      {"id": "recBJduGOPtEFGZSW", "name": "Rebecca Rettig", "company": "Jito Labs", "title": "Chief Operating Officer + Chief Legal Officer", "staff": false},
-      {"id": "recEE8mDTL4ayxGE3", "name": "Sun Raghupathi", "company": "Veda", "title": "CEO & Co-founder", "staff": false},
-      {"id": "recN5NVYIXMoBTJZ8", "name": "Anatoly Crachilov", "company": "Nickel Digital Asset Management", "title": "CEO & Founding Partner", "staff": false},
-      {"id": "recS6XHTcavX0NOfc", "name": "Santiago Roel Santos", "company": "Inversion", "title": "Founder & CEO", "staff": false},
-      {"id": "recXidCym6caKyCCE", "name": "Dan Smith", "company": "Blockworks", "title": "VP of Product", "staff": true},
-      {"id": "recfJwo3XnhCNok6X", "name": "Samantha Bohbot", "company": "RockawayX", "title": "General Partner and Chief Growth Officer", "staff": false},
-      {"id": "reciC07VY7Gqeqvkh", "name": "Theo Golden", "company": "Baillie Gifford", "title": "Tokenisation Lead and Investment Manager", "staff": false},
-      {"id": "recqVRfqSKZ2vZKWu", "name": "Thomas Chen", "company": "BNB Chain", "title": "Head of Commercial", "staff": false},
-      {"id": "recsjDUtnKbqxmOgn", "name": "Brian Smith", "company": "Jito Foundation", "title": "President", "staff": false}
+      {
+        "id": "recBJduGOPtEFGZSW",
+        "name": "Rebecca Rettig",
+        "company": "Jito Labs",
+        "title": "Chief Operating Officer + Chief Legal Officer",
+        "staff": false
+      },
+      {
+        "id": "recEE8mDTL4ayxGE3",
+        "name": "Sun Raghupathi",
+        "company": "Veda",
+        "title": "CEO & Co-founder",
+        "staff": false
+      },
+      {
+        "id": "recN5NVYIXMoBTJZ8",
+        "name": "Anatoly Crachilov",
+        "company": "Nickel Digital Asset Management",
+        "title": "CEO & Founding Partner",
+        "staff": false
+      },
+      {
+        "id": "recS6XHTcavX0NOfc",
+        "name": "Santiago Roel Santos",
+        "company": "Inversion",
+        "title": "Founder & CEO",
+        "staff": false
+      },
+      {
+        "id": "recXidCym6caKyCCE",
+        "name": "Dan Smith",
+        "company": "Blockworks",
+        "title": "VP of Product",
+        "staff": true
+      },
+      {
+        "id": "recfJwo3XnhCNok6X",
+        "name": "Samantha Bohbot",
+        "company": "RockawayX",
+        "title": "General Partner and Chief Growth Officer",
+        "staff": false
+      },
+      {
+        "id": "reciC07VY7Gqeqvkh",
+        "name": "Theo Golden",
+        "company": "Baillie Gifford",
+        "title": "Tokenisation Lead and Investment Manager",
+        "staff": false
+      },
+      {
+        "id": "recqVRfqSKZ2vZKWu",
+        "name": "Thomas Chen",
+        "company": "BNB Chain",
+        "title": "Head of Commercial",
+        "staff": false
+      },
+      {
+        "id": "recsjDUtnKbqxmOgn",
+        "name": "Brian Smith",
+        "company": "Jito Foundation",
+        "title": "President",
+        "staff": false
+      }
     ],
     "placedCount": 18,
     "inCount": 27
   },
   "topics": [
-    {"id": "clarity-market-structure", "topic": "Market structure after CLARITY", "questions": ["Which activities stay in the broker-dealer perimeter, and which move onchain?", "Does a clearer US statute actually change how Asian desks book digital-asset risk?", "Who becomes the venue of record once tokenized cash and securities share a clock?"], "debate": "CLARITY reduces legal fog but does not decide market structure. The fight is whether tokenized activity inherits exchange rules or builds a parallel stack.", "titleIdeas": ["What CLARITY Actually Changes for Trading Desks", "The Perimeter Problem: Who Supervises Tokenized Markets?"], "source": "seed"},
-    {"id": "tokenization-t0", "topic": "Tokenization and T+0 settlement", "questions": ["If issuance is instant, which part of the stack still needs a custodian delay?", "Can T+0 coexist with securities-lending and failed-trade processes?", "Who owns the cash leg when the security is already onchain?"], "debate": "Issuers sell atomic settlement. Operations teams still live with collateral, FX, and recall. The honest session is about what still fails at T+0.", "titleIdeas": ["T+0 Is Easy Until You Need the Cash", "Atomic Settlement vs How Markets Actually Clear"], "source": "seed"},
-    {"id": "stablecoin-payments", "topic": "Stablecoins as payment rails", "questions": ["When does a bank treasury treat a stablecoin as cash rather than a vendor product?", "Which corridors already clear cheaper onchain than correspondent banking?", "What happens to float, AML, and redemption when volume is wholesale?"], "debate": "The payments story is not consumer cards. It is whether corporate treasuries will hold, settle, and reconcile in a dollar token.", "titleIdeas": ["When a Stablecoin Becomes a Treasury Instrument", "Payments Without the Correspondent Stack"], "source": "seed"},
-    {"id": "bank-vs-onchain", "topic": "Bank balance sheets vs onchain markets", "questions": ["Which products stay on a bank ledger because of capital treatment?", "Where do onchain venues already price better than the dealer?", "Can a bank be the issuer, the custodian, and the venue without a conflict?"], "debate": "Banks will tokenize what they already intermediate. The open question is whether they remain the market or become another node.", "titleIdeas": ["Will Banks Tokenize the Franchise or Lose It?", "Onchain Markets That Still Need a Bank"], "source": "seed"},
-    {"id": "btc-treasury-quantum", "topic": "Bitcoin treasury policy and quantum risk", "questions": ["How should a public-company treasury size BTC against duration and liquidity needs?", "Is quantum a 2030 custody problem or a 2026 disclosure problem?", "Who is accountable if a treasury key scheme is obsolete before the holding period ends?"], "debate": "BTC on the balance sheet is a governance choice, not a trade. Quantum risk is being used as both a scare and a reason to delay custody upgrades.", "titleIdeas": ["Bitcoin on the Balance Sheet Is a Governance Decision", "Custody After Quantum Headlines"], "source": "seed"},
-    {"id": "vaults-rwa-yield", "topic": "Vaults and RWA yield", "questions": ["What is the actual source of yield once you strip protocol incentives?", "How do allocators underwrite a vault that can change strategy without a new mandate?", "Where does bankruptcy remoteness sit when the asset is tokenized credit?"], "debate": "Vaults package yield. The institutional question is mandate, liquidity, and who is the fiduciary when the strategy is software.", "titleIdeas": ["What Is Inside the Vault After Incentives End", "RWA Yield Without a New Fiduciary Story"], "source": "seed"},
-    {"id": "prediction-markets", "topic": "Prediction markets and information", "questions": ["Are event contracts closer to research tools or to gambling books?", "What would make a prediction market usable for a risk committee?", "Who is the regulated intermediary when a contract settles on a political outcome?"], "debate": "Volume is not the same as signal. Institutions need to know whether these markets can sit next to research, or only next to retail flow.", "titleIdeas": ["When an Event Contract Is Research, Not a Bet", "Prediction Markets and the Risk Committee"], "source": "seed"},
-    {"id": "hk-sg-london-us", "topic": "Hong Kong and Singapore vs London and the US", "questions": ["Which licensing path actually lets a firm book institutional flow in 2026?", "Is Asia competing on speed of approval or on the shape of the product?", "Where do firms dual-license, and where do they pick one home?"], "debate": "Policy is not a league table. Desks will sit where they can hold client assets, run a book, and explain the regime to a board.", "titleIdeas": ["Where Institutional Books Will Actually Sit", "Four Regimes, One Desk: How Firms Choose a Home"], "source": "seed"},
-    {"id": "agentic-finance", "topic": "Agentic finance and delegated execution", "questions": ["Who is the legal person when software places the order?", "What controls must sit between an agent and a custody key?", "Is this a better OMS, or a new kind of fiduciary?"], "debate": "Agents will not get a hall pass from market-abuse and best-execution rules. The useful debate is mandate, kill-switch, and audit.", "titleIdeas": ["Who Is Liable When the Agent Trades", "Delegated Execution Without a New Fiduciary Hole"], "source": "seed"},
-    {"id": "liquid-vs-illiquid-vc", "topic": "Liquid tokens vs illiquid venture", "questions": ["Has token liquidity changed how late-stage rounds are priced?", "When should an allocator prefer a liquid book over a 10-year fund?", "What happens to venture if secondaries and tokens compress the illiquidity premium?"], "debate": "The industry still sells illiquidity as a feature. Allocators are asking whether they are being paid for it.", "titleIdeas": ["Is the Illiquidity Premium Still There?", "When Tokens Price the Round Before the Fund Does"], "source": "seed"}
+    {
+      "id": "clarity-market-structure",
+      "topic": "Market structure after CLARITY",
+      "questions": [
+        "Which activities stay in the broker-dealer perimeter, and which move onchain?",
+        "Does a clearer US statute actually change how Asian desks book digital-asset risk?",
+        "Who becomes the venue of record once tokenized cash and securities share a clock?"
+      ],
+      "debate": "CLARITY reduces legal fog but does not decide market structure. The fight is whether tokenized activity inherits exchange rules or builds a parallel stack.",
+      "titleIdeas": [
+        "What CLARITY Actually Changes for Trading Desks",
+        "The Perimeter Problem: Who Supervises Tokenized Markets?"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "tokenization-t0",
+      "topic": "Tokenization and T+0 settlement",
+      "questions": [
+        "If issuance is instant, which part of the stack still needs a custodian delay?",
+        "Can T+0 coexist with securities-lending and failed-trade processes?",
+        "Who owns the cash leg when the security is already onchain?"
+      ],
+      "debate": "Issuers sell atomic settlement. Operations teams still live with collateral, FX, and recall. The honest session is about what still fails at T+0.",
+      "titleIdeas": [
+        "T+0 Is Easy Until You Need the Cash",
+        "Atomic Settlement vs How Markets Actually Clear"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "stablecoin-payments",
+      "topic": "Stablecoins as payment rails",
+      "questions": [
+        "When does a bank treasury treat a stablecoin as cash rather than a vendor product?",
+        "Which corridors already clear cheaper onchain than correspondent banking?",
+        "What happens to float, AML, and redemption when volume is wholesale?"
+      ],
+      "debate": "The payments story is not consumer cards. It is whether corporate treasuries will hold, settle, and reconcile in a dollar token.",
+      "titleIdeas": [
+        "When a Stablecoin Becomes a Treasury Instrument",
+        "Payments Without the Correspondent Stack"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "bank-vs-onchain",
+      "topic": "Bank balance sheets vs onchain markets",
+      "questions": [
+        "Which products stay on a bank ledger because of capital treatment?",
+        "Where do onchain venues already price better than the dealer?",
+        "Can a bank be the issuer, the custodian, and the venue without a conflict?"
+      ],
+      "debate": "Banks will tokenize what they already intermediate. The open question is whether they remain the market or become another node.",
+      "titleIdeas": [
+        "Will Banks Tokenize the Franchise or Lose It?",
+        "Onchain Markets That Still Need a Bank"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "btc-treasury-quantum",
+      "topic": "Bitcoin treasury policy and quantum risk",
+      "questions": [
+        "How should a public-company treasury size BTC against duration and liquidity needs?",
+        "Is quantum a 2030 custody problem or a 2026 disclosure problem?",
+        "Who is accountable if a treasury key scheme is obsolete before the holding period ends?"
+      ],
+      "debate": "BTC on the balance sheet is a governance choice, not a trade. Quantum risk is being used as both a scare and a reason to delay custody upgrades.",
+      "titleIdeas": [
+        "Bitcoin on the Balance Sheet Is a Governance Decision",
+        "Custody After Quantum Headlines"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "vaults-rwa-yield",
+      "topic": "Vaults and RWA yield",
+      "questions": [
+        "What is the actual source of yield once you strip protocol incentives?",
+        "How do allocators underwrite a vault that can change strategy without a new mandate?",
+        "Where does bankruptcy remoteness sit when the asset is tokenized credit?"
+      ],
+      "debate": "Vaults package yield. The institutional question is mandate, liquidity, and who is the fiduciary when the strategy is software.",
+      "titleIdeas": [
+        "What Is Inside the Vault After Incentives End",
+        "RWA Yield Without a New Fiduciary Story"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "prediction-markets",
+      "topic": "Prediction markets and information",
+      "questions": [
+        "Are event contracts closer to research tools or to gambling books?",
+        "What would make a prediction market usable for a risk committee?",
+        "Who is the regulated intermediary when a contract settles on a political outcome?"
+      ],
+      "debate": "Volume is not the same as signal. Institutions need to know whether these markets can sit next to research, or only next to retail flow.",
+      "titleIdeas": [
+        "When an Event Contract Is Research, Not a Bet",
+        "Prediction Markets and the Risk Committee"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "hk-sg-london-us",
+      "topic": "Hong Kong and Singapore vs London and the US",
+      "questions": [
+        "Which licensing path actually lets a firm book institutional flow in 2026?",
+        "Is Asia competing on speed of approval or on the shape of the product?",
+        "Where do firms dual-license, and where do they pick one home?"
+      ],
+      "debate": "Policy is not a league table. Desks will sit where they can hold client assets, run a book, and explain the regime to a board.",
+      "titleIdeas": [
+        "Where Institutional Books Will Actually Sit",
+        "Four Regimes, One Desk: How Firms Choose a Home"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "agentic-finance",
+      "topic": "Agentic finance and delegated execution",
+      "questions": [
+        "Who is the legal person when software places the order?",
+        "What controls must sit between an agent and a custody key?",
+        "Is this a better OMS, or a new kind of fiduciary?"
+      ],
+      "debate": "Agents will not get a hall pass from market-abuse and best-execution rules. The useful debate is mandate, kill-switch, and audit.",
+      "titleIdeas": [
+        "Who Is Liable When the Agent Trades",
+        "Delegated Execution Without a New Fiduciary Hole"
+      ],
+      "source": "seed"
+    },
+    {
+      "id": "liquid-vs-illiquid-vc",
+      "topic": "Liquid tokens vs illiquid venture",
+      "questions": [
+        "Has token liquidity changed how late-stage rounds are priced?",
+        "When should an allocator prefer a liquid book over a 10-year fund?",
+        "What happens to venture if secondaries and tokens compress the illiquidity premium?"
+      ],
+      "debate": "The industry still sells illiquidity as a feature. Allocators are asking whether they are being paid for it.",
+      "titleIdeas": [
+        "Is the Illiquidity Premium Still There?",
+        "When Tokens Price the Round Before the Fund Does"
+      ],
+      "source": "seed"
+    }
   ],
-  "generatedAt": "2026-08-22T20:15:00Z"
+  "generatedAt": "2026-08-22T20:15:00Z",
+  "hotTopics": {
+    "asia": [
+      "International Financial Infrastructure",
+      "Onchain Asset Management",
+      "Investor Relations-style Presentations",
+      "FinTech x DeFi Convergence",
+      "Protocol & App Fundamentals",
+      "AI x Crypto Convergence",
+      "Stablecoins & FX",
+      "Macroeconomic Backdrop",
+      "Perps & Derivatives",
+      "Prediction Markets",
+      "Global Regulation",
+      "DeFi & Vaults",
+      "Enterprise Security"
+    ],
+    "london": [
+      "Stablecoins & Global Payments",
+      "Tokenization & RWAs",
+      "Perps & Derivatives",
+      "AI x Crypto Convergence",
+      "Macro Backdrop",
+      "Token Markets",
+      "Protocol & App Fundamentals",
+      "Onchain Asset Management",
+      "Prediction Markets",
+      "DeFi & Vaults",
+      "US, UK, & European Markets",
+      "Investor Relations-style Presentations"
+    ]
+  }
 }
