@@ -166,13 +166,14 @@ export default function SmartAgenda({ event, rows, pack, topics }) {
         <div className="section-heading">
           <p className="eyebrow">03</p>
           <h3>Topics, questions, debates</h3>
-          <p className="section-intro">Seed list for editorial sessions. Bennett can add more via chat. This is not an X live pull.</p>
+          <p className="section-intro">From Blockworks analysts and founders on X. Handles listed on each card. Dated read, not a live feed.</p>
         </div>
         <div className="topic-grid">
           {(topics || []).map((item) => (
             <article className="topic-card" key={item.id}>
-              <p className="eyebrow">{item.source}</p>
+              <p className="eyebrow">{item.source === 'x' ? 'From Blockworks analysts and founders on X' : item.source}</p>
               <h4>{item.topic}</h4>
+              {item.handles?.length ? <p className="topic-handles">{item.handles.map((handle) => `@${handle}`).join(' ')}</p> : null}
               <p className="topic-debate">{item.debate}</p>
               <ul>{item.questions.map((question) => <li key={question}>{question}</li>)}</ul>
               <p className="topic-titles">{item.titleIdeas.join(' / ')}</p>
