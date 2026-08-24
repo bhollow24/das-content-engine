@@ -1,1 +1,47 @@
-PLACEHOLDER_JSON
+{
+  "topicsSource": "X BWR Analysts list 1754245487874461960 plus @JasonYanowitz @MikeIppolito_ @fejau_inc @Blockworks @blockworksDAS @blockworksres. Read 2026-08-24 via signed-in box Chrome.",
+  "sourceNote": "Topics from the 2026-08-24 signed-in X read. Asia and London unplaced speaker rows are unchanged.",
+  "generatedAt": "2026-08-24T14:40:00Z",
+  "asia": {
+    "unplaced": [
+      {"id": "rec0iYx840rGBhfsN", "name": "Ness", "company": "Hyperlend", "title": "", "staff": false},
+      {"id": "rec4jRt1SdDhS93W2", "name": "Vladimir Novakovski", "company": "Lighter", "title": "Founder & CEO", "staff": false},
+      {"id": "rechAPe0ddHPiKexv", "name": "Johann Kerbrat", "company": "Robinhood", "title": "SVP & GM of Crypto", "staff": false},
+      {"id": "recmlX9abieWzC8y7", "name": "Carolyn Wyatt", "company": "Blockworks", "title": "Event Manager", "staff": true},
+      {"id": "reco9ysoHWF2qcCU3", "name": "Ken Ng", "company": "Uniswap", "title": "Head of Ecosystem", "staff": false},
+      {"id": "recou4idsGDUU7qtq", "name": "Bennett Holloway", "company": "Blockworks", "title": "Head of Events", "staff": true},
+      {"id": "recuqXFfglETOMKUt", "name": "John Nahas", "company": "Ava Labs", "title": "Chief Business Officer", "staff": false}
+    ],
+    "placedCount": 43,
+    "inCount": 50
+  },
+  "london": {
+    "unplaced": [
+      {"id": "recBJduGOPtEFGZSW", "name": "Rebecca Rettig", "company": "Jito Labs", "title": "Chief Operating Officer + Chief Legal Officer", "staff": false},
+      {"id": "recEE8mDTL4ayxGE3", "name": "Sun Raghupathi", "company": "Veda", "title": "CEO & Co-founder", "staff": false},
+      {"id": "recN5NVYIXMoBTJZ8", "name": "Anatoly Crachilov", "company": "Nickel Digital Asset Management", "title": "CEO & Founding Partner", "staff": false},
+      {"id": "recS6XHTcavX0NOfc", "name": "Santiago Roel Santos", "company": "Inversion", "title": "Founder & CEO", "staff": false},
+      {"id": "recXidCym6caKyCCE", "name": "Dan Smith", "company": "Blockworks", "title": "VP of Product", "staff": true},
+      {"id": "recfJwo3XnhCNok6X", "name": "Samantha Bohbot", "company": "RockawayX", "title": "General Partner and Chief Growth Officer", "staff": false},
+      {"id": "reciC07VY7Gqeqvkh", "name": "Theo Golden", "company": "Baillie Gifford", "title": "Tokenisation Lead and Investment Manager", "staff": false},
+      {"id": "recqVRfqSKZ2vZKWu", "name": "Thomas Chen", "company": "BNB Chain", "title": "Head of Commercial", "staff": false},
+      {"id": "recsjDUtnKbqxmOgn", "name": "Brian Smith", "company": "Jito Foundation", "title": "President", "staff": false}
+    ],
+    "placedCount": 18,
+    "inCount": 27
+  },
+  "topics": [
+    {"id": "disclosure-market-structure", "topic": "Disclosure becomes market structure", "questions": ["Does a voluntary disclosure framework outperform mandated filings?", "Will exchanges gate listings on disclosure completeness?"], "debate": "Disclosure is a pricing input vs a compliance checkbox.", "titleIdeas": ["Underwriting Standards for Token Markets", "What Institutions Need Before They Can Own the Long Tail"], "source": "x", "handles": ["JasonYanowitz", "Blockworks", "MikeIppolito_"]},
+    {"id": "reg-crypto-offering-ladder", "topic": "Reg Crypto and the offering-size ladder", "questions": ["Do tiered exemptions bring primary issuance back onshore?", "What does scaled protection mean for Asian issuers selling into the US?"], "debate": "Exemptive relief reopens early-stage fundraising vs entrenches a two-tier market.", "titleIdeas": ["Primary Issuance Returns", "Reading the SEC Proposal Line by Line"], "source": "x", "handles": ["marcarjoon", "0xMetaLight", "JasonYanowitz"]},
+    {"id": "stablecoins-corporate-cash", "topic": "Stablecoins as corporate cash", "questions": ["If FASB permits cash-equivalent treatment, which treasurers move first?", "How does yield pass-through change issuer economics?"], "debate": "GENIUS plus accounting relief is a step change vs a slow, audit-gated drip.", "titleIdeas": ["Stablecoins on the Corporate Balance Sheet", "Cash Equivalents, Redefined"], "source": "x", "handles": ["MikeIppolito_", "blockworksres"]},
+    {"id": "tokenized-deposits-vs-stablecoins", "topic": "Tokenized deposits vs stablecoins", "questions": ["Can banks reconcile privacy, compliance and public liquidity onchain?", "Does a deposit token ever reach stablecoin-grade interoperability?"], "debate": "Bank money onchain is the endgame vs a permanently walled garden.", "titleIdeas": ["Bank Money Onchain", "$310B Against Nearly Nothing"], "source": "x", "handles": ["blockworksres"]},
+    {"id": "token-cash-flows-buybacks", "topic": "Token cash flows and buyback economics", "questions": ["Is FDV-to-revenue a defensible screen in crypto?", "Do buyback-and-burn programs create durable demand or just cyclical support?"], "debate": "Tokens should be valued as cash-flow assets vs as monetary assets.", "titleIdeas": ["Valuing Tokens on Revenue", "The Buyback Era"], "source": "x", "handles": ["0xcarlosg", "AvgJoesCrypto", "shaundadevens"]},
+    {"id": "l1-monetary-policy", "topic": "L1 monetary policy at the ballot box", "questions": ["Should terminal inflation schedules be accelerated by governance vote?", "Who is the constituency for a fully burned resource fee?"], "debate": "Fee burn aligns holders vs taxes the activity you want.", "titleIdeas": ["Governing Monetary Policy Onchain", "Disinflation, Burns and the Cost of Blockspace"], "source": "x", "handles": ["0xcarlosg", "minnus"]},
+    {"id": "staking-float-validators", "topic": "Staking ratios, float and validator economics", "questions": ["What does ~69% staked do to liquid float and price behavior?", "Does the shift to priority fees change validator selection for institutions?"], "debate": "High staking ratios are security vs manufactured scarcity.", "titleIdeas": ["Float, Security and the Cost of Staking", "The Fee Era for Validators"], "source": "x", "handles": ["minnus", "blockworksres"]},
+    {"id": "broker-owned-chains", "topic": "Broker-owned chains and tokenized equities", "questions": ["Do distribution-owning brokers make general-purpose L1s redundant?", "What is the regulatory perimeter for stock tokens airdropped to token holders?"], "debate": "Distribution beats decentralization vs neutrality still wins.", "titleIdeas": ["When the Broker Owns the Chain", "Equities, Onchain and On Whose Terms"], "source": "x", "handles": ["AvgJoesCrypto", "0xcarlosg"]},
+    {"id": "perps-builder-codes", "topic": "Perps, builder codes and the execution stack", "questions": ["Who captures the spread when front ends route to a shared venue?", "Do builder codes commoditize the exchange or the interface?"], "debate": "Liquidity concentrates in one venue vs fragments across front ends.", "titleIdeas": ["Routing the Perp Market", "Who Owns the Order Flow"], "source": "x", "handles": ["0xcarlosg", "blockworksDAS"]},
+    {"id": "onchain-credit-scale", "topic": "Onchain credit at scale", "questions": ["What is Morpho's ~$13B deposit base actually financing?", "Does consumer onchain credit survive a drawdown?"], "debate": "Onchain lending is a genuine credit market vs collateralized leverage in a new wrapper.", "titleIdeas": ["Onchain Credit Comes of Age", "Collateral, Duration and the Next Cycle"], "source": "x", "handles": ["0xcarlosg"]},
+    {"id": "synthetic-dollars-basis", "topic": "Synthetic dollars and the basis trade", "questions": ["How cyclical is basis-backed yield across funding regimes?", "What backing mix should institutional allocators require?"], "debate": "Synthetic dollars are structurally sound vs a funding-rate carry fund.", "titleIdeas": ["Inside the Backing of Synthetic Dollars", "When Funding Turns"], "source": "x", "handles": ["Kunallegendd", "shaundadevens"]},
+    {"id": "macro-vol-collateral-btc", "topic": "Macro regime: vol supply, collateral and BTC", "questions": ["What does sustained call overwriting at sub-30 vol do to a BTC breakout?", "Are Treasury buybacks a de facto easing channel for risk assets?"], "debate": "This move is macro liquidity-driven vs crypto-native flows.", "titleIdeas": ["The Volatility Supply Problem in Bitcoin", "Collateral, Buybacks and the New Macro Regime"], "source": "x", "handles": ["fejau_inc", "shaundadevens"]}
+  ]
+}
