@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { UserButton } from '@clerk/nextjs';
 import { useEffect, useMemo, useState } from 'react';
 import SmartAgenda, { UpcomingAnalytics } from './SmartAgenda';
+import InvitationsCommandCenter from './InvitationsCommandCenter';
 
 const EVENTS = {
   nyc: { id: 'nyc', group: 'past', title: 'DAS NYC 2026', city: 'nyc', date: 'March 2026', location: 'New York City', description: '94 session transcripts with entity and topic coverage.' },
@@ -176,11 +177,13 @@ export default function Dashboard({ data, nyc, smart }) {
   const event = EVENTS[eventId];
   const tool = toolName === 'clips' ? 'clips' : toolName === 'smart' ? 'smart' : 'analytics';
   const group = GROUPS[route];
+  const invitations = route === 'invitations';
   const showSmart = event?.group === 'upcoming';
   let eyebrow = 'Events';
   let title = 'DAS Content Engine';
   let subtitle = 'Select an event.';
-  if (group) { title = group.title; subtitle = group.intro; }
+  if (invitations) { eyebrow = 'Global workspace'; title = 'Invitations'; subtitle = 'Speaker outreach for DAS Asia and DAS London.'; }
+  else if (group) { title = group.title; subtitle = group.intro; }
   else if (event) {
     eyebrow = GROUPS[event.group].title;
     title = tool === 'clips' ? 'Clip Library' : tool === 'smart' ? 'Smart Agenda' : 'Content Analytics';
@@ -192,7 +195,8 @@ export default function Dashboard({ data, nyc, smart }) {
         <div className="topline">
           <button className="brand-home" type="button" onClick={() => navigate('home')} aria-label="Return to the DAS Content Engine home">Blockworks</button>
           <span className="draft">Internal workspace</span>
-          <span className="guardrail">Drafts only · no auto-posting</span>
+          <button className="global-tool-link" type="button" onClick={() => navigate('invitations')}>Invitations</button>
+          <span className="guardrail">Human-approved outreach · no auto-posting</span>
           <div className="user-control" aria-label="Account menu"><UserButton /></div>
         </div>
         <div className="product-lockup" aria-label="DAS Content Engine"><span className="product-mark">DAS</span><span className="product-name">Content Engine</span></div>
@@ -202,13 +206,15 @@ export default function Dashboard({ data, nyc, smart }) {
         {route === 'home' && (
           <section className="view on" id="view-home">
             <div className="section-heading"><h2>Events</h2></div>
-            <div className="choice-grid">
+            <div className="choice-grid three">
               <button className="choice-card past-card" type="button" onClick={() => navigate('past')}><span className="choice-index">01</span><span className="choice-label">Past Events</span><span className="choice-meta"><span>Content Analytics</span><span>Clip Library</span></span><span className="choice-arrow" aria-hidden="true">-</span></button>
               <button className="choice-card upcoming-card" type="button" onClick={() => navigate('upcoming')}><span className="choice-index">02</span><span className="choice-label">Upcoming Events</span><span className="choice-meta"><span>Content Analytics</span><span>Clip Library</span><span>Smart Agenda</span></span><span className="choice-arrow" aria-hidden="true">-</span></button>
+              <button className="choice-card invitations-card" type="button" onClick={() => navigate('invitations')}><span className="choice-index">03</span><span className="choice-label">Invitations</span><span className="choice-meta"><span>Asia</span><span>London</span><span>Gmail + Airtable</span></span><span className="choice-arrow" aria-hidden="true">-</span></button>
             </div>
             <div className="home-status"><div><strong>94</strong><span>past sessions transcribed</span></div><div><strong>2</strong><span>upcoming events</span></div><div><strong>118</strong><span>entities detected</span></div><div><strong>102</strong><span>NYC videos listed</span></div></div>
           </section>
         )}
+        {invitations && <InvitationsCommandCenter />}
         {group && (
           <section className="view on">
             <button className="back-link" type="button" onClick={() => navigate('home')}>Back to events</button>
