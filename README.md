@@ -1,6 +1,6 @@
 # DAS Content Engine
 
-Authenticated internal working product for the Blockworks DAS content team. Nothing auto-posts, auto-DMs, or auto-emails.
+Authenticated internal working product for the Blockworks DAS content team. Nothing auto-posts or auto-DMs. Invitation emails require a rendered preview, an explicit Send click, and a second confirmation.
 
 ## Product structure
 
@@ -14,6 +14,8 @@ Every event contains two workspaces:
 - Content Analytics
 - Clip Library
 
+The global Invitations Command Center adds a single outreach desk for DAS Asia and DAS London. It reads the Event System'26 Speaker Hit List, enriches missing emails from HubSpot, drafts or sends through Bennett's Gmail, and proposes reply-driven Airtable status changes for human confirmation.
+
 ## Current data
 
 - NYC 2026 — 118 tracked entities across 94 session transcripts
@@ -25,10 +27,13 @@ Past-event analytics use transcript mention data. Upcoming-event analytics use a
 ## Local use
 
 1. Pull the Vercel development environment variables.
-2. Run `pnpm install`.
-3. Run `pnpm dev`.
+2. Copy the Invitations keys listed in `.env.example` into a local-only environment file. Use preview-scoped credentials for testing.
+3. Run `pnpm install`.
+4. Run `pnpm dev`.
 
 Clerk protects the dashboard route. The sign-in flow lives at `/sign-in`.
+
+If Airtable or Gmail credentials are absent, Invitations intentionally runs in safe testing mode with representative records. Draft and send actions are simulated and clearly labeled; no external records change.
 
 ## Deployment
 
@@ -37,6 +42,10 @@ The project uses Next.js App Router on Vercel. Clerk credentials are provisioned
 ## Guardrails
 
 - Keep publishing and outreach human-approved
+- Limit Invitations access with `INVITATIONS_ALLOWED_EMAILS` (Bennett and Carolyn for v1)
+- Never create HubSpot contacts or duplicate Airtable Hit List rows
+- Always BCC the existing HubSpot engage address on invitation mail
+- Require confirmation before applying reply-classified statuses
 - Treat the agenda as the operational source of truth
 - Preserve stable session IDs once they are assigned
 - Use the documented clip naming convention for new assets

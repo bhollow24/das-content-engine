@@ -64,6 +64,8 @@ button:focus-visible, input:focus-visible {
 }
 
 .guardrail { margin-left: auto; }
+.global-tool-link { appearance: none; margin-left: auto; border: 1px solid var(--ink); padding: 4px 8px; background: var(--ink); color: var(--paper); cursor: pointer; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+.global-tool-link + .guardrail { margin-left: 0; }
 .user-control { display: flex; align-items: center; }
 
 .product-lockup {
@@ -132,6 +134,8 @@ main { flex: 1; padding: 0 40px 80px; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   border: 1px solid var(--ink);
 }
+.choice-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.choice-grid.three .choice-card { min-height: 350px; }
 
 .choice-card {
   position: relative;
@@ -445,7 +449,7 @@ footer {
   .user-control { margin-left: auto; }
   .product-lockup { display: none; }
   main { padding: 0 20px 64px; }
-  .choice-grid, .event-grid, .clip-overview, .analytics-charts, .social-folders { grid-template-columns: 1fr; }
+  .choice-grid, .choice-grid.three, .event-grid, .clip-overview, .analytics-charts, .social-folders { grid-template-columns: 1fr; }
   .choice-card + .choice-card { border-left: 0; border-top: 1px solid var(--ink); }
   .choice-card { min-height: 320px; }
   .home-status { grid-template-columns: repeat(2, minmax(0,1fr)); }
